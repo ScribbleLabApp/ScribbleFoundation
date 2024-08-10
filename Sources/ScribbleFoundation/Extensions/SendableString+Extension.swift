@@ -1,5 +1,5 @@
 //
-//  SCRNetworkingMonitor.swift
+//  SendableString+Extension.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -30,45 +30,32 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Atomics
-import Network
-import Dispatch
 import Foundation
 
 @available(iOS 18.0, macOS 15.0, *)
-public final class SCRNetworkingMonitor: Sendable {
-    private let _isConnectedToInternet = ManagedAtomic<Bool>(false)
+public extension SendableString {
     
-    public var isConnectedToInternet: Bool {
-        return _isConnectedToInternet.load(ordering: .sequentiallyConsistent)
-    }
-    
-    private let monitor = NWPathMonitor()
-    private let monitorQueue = DispatchQueue(label: "NetworkingMonitor")
-    
-    public init() {
-        startMonitoring()
-    }
-    
-    deinit {
-        stopMonitoring()
-    }
-    
-    private func startMonitoring() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            Task { @MainActor in
-                self?.updateConnectionStatus(path: path)
-            }
+    func append(_ string: String) async {
+        await asyncMutate { current in
+            current + string
         }
-        
-        monitor.start(queue: monitorQueue)
     }
     
-    private func stopMonitoring() {
-        monitor.cancel()
+    func prepend(_ string: String) async {
+        await asyncMutate { current in
+            string + current
+        }
     }
     
-    @MainActor
-    private func updateConnectionStatus(path: NWPath) {
-        _isConnectedToInternet.store(path.status == .satisfied, ordering: .sequentiallyConsistent)
+    func replace(_ target: String, with replacement: String) async {
+        await asyncMutate { current in
+            current.replacingOccurrences(of: target, with: replacement)
+        }
+    }
+    
+    func trim() async {
+        await asyncMutate { current in
+            current.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
     }
 }
