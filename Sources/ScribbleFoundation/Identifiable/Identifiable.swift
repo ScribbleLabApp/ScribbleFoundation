@@ -1,5 +1,5 @@
 //
-//  Networking.swift
+//  Identifiable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,31 +31,8 @@
 
 import Foundation
 
-/// A protocol that defines network operations for fetching and requesting data.
-///
-/// The `Networking` protocol outlines the methods required to perform network requests and handle
-/// responses asynchronously. It supports fetching and decoding data from a specified endpoint,
-/// as well as performing raw network requests.
-@available(iOS 18.0, macOS 15.0, *)
-public protocol Networking: AnyObject {
-    
-    /// Fetches and decodes data from the specified endpoint into a Swift type.
-    ///
-    /// This method performs a network request to the provided endpoint, waits for the response, and
-    /// then decodes the response data into the specified type.
-    ///
-    /// - Parameter endpoint: The `Endpoint` object representing the network request details.
-    /// - Returns: A `T` instance, which is the decoded data of type `T`.
-    /// - Throws: An error if the network request fails or if decoding fails.
-    func fetch<T: Decodable>(_ endpoint: Endpoint) async throws -> T
-    
-    /// Performs a network request to the specified endpoint and returns the raw data.
-    ///
-    /// This method performs a network request to the provided endpoint and checks if the response
-    /// status code indicates success (200-299). It returns the raw data from the response.
-    ///
-    /// - Parameter endpoint: The `Endpoint` object representing the network request details.
-    /// - Returns: The raw data received from the network request.
-    /// - Throws: An error if the network request fails or if the response status code indicates a failure.
-    func request(_ endpoint: Endpoint) async throws -> Data
+/// A protocol for objects with a unique identifier.
+public protocol Identifiable {
+    /// The unique identifier for the object.
+    var id: UUID { get }
 }

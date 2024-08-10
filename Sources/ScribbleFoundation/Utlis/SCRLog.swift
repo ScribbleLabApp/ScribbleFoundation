@@ -32,6 +32,24 @@
 import os
 import Foundation
 
+/// A logging utility that provides structured logging with categorized messages.
+///
+/// The `SCRLog` struct offers a way to create and manage log messages with different categories.
+/// It uses a subsystem and category to organize log messages, making it easier to filter and analyze
+/// logs based on the application or module and the type of message being logged.
+///
+/// ## Properties
+/// - `subsystem`: A string representing the subsystem (e.g., the application or module) generating the log messages.
+/// - `category`: An instance of `Category` representing the specific category of log messages within the subsystem.
+///
+/// ## Initialization
+/// - `init(subsystem:category:)`: Initializes a new `SCRLog` instance with the given subsystem and category.
+///
+/// ## Methods
+/// - `logger(for:)`: Creates a `Logger` instance configured with the current subsystem and the specified category.
+/// - Logging methods (`error(_:)`, `debug(_:)`, `warning(_:)`, `memoryWarning(_:)`, `log(_:)`): Methods to
+///   log messages of different categories with appropriate prefixes.
+///
 @available(iOS 18.0, macOS 15.0, *)
 public struct SCRLog {
     

@@ -34,25 +34,53 @@ import Network
 import Dispatch
 import Foundation
 
+/// A network connectivity monitor that tracks the device's internet connection status.
+///
+/// The `SCRNetworkingMonitor` class monitors the device's network connection status using the
+/// `NWPathMonitor` class and provides an observable property to check if the device is connected
+/// to the internet. It utilizes `ManagedAtomic` for thread-safe storage of the connection status and
+/// performs updates on the main thread.
 @available(iOS 18.0, macOS 15.0, *)
 public final class SCRNetworkingMonitor: Sendable {
+    
+    /// A thread-safe boolean that indicates if the device is connected to the internet.
     private let _isConnectedToInternet = ManagedAtomic<Bool>(false)
     
+    /// A boolean property that provides the current internet connection status.
+    ///
+    /// This property returns the latest value of the connection status, which is managed in a
+    /// thread-safe manner using `ManagedAtomic`.
+    ///
+    /// - Returns: A boolean indicating whether the device is connected to the internet.
     public var isConnectedToInternet: Bool {
         return _isConnectedToInternet.load(ordering: .sequentiallyConsistent)
     }
     
+    
+    /// The network path monitor used to detect changes in network connectivity.
     private let monitor = NWPathMonitor()
+    
+    /// The dispatch queue on which the network monitor runs.
     private let monitorQueue = DispatchQueue(label: "NetworkingMonitor")
     
+    
+    /// Initializes a new `SCRNetworkingMonitor` instance and starts monitoring network status.
+    ///
+    /// This initializer sets up the `NWPathMonitor` to start monitoring network changes immediately.
     public init() {
         startMonitoring()
     }
     
+    /// Stops monitoring network status.
+    ///
+    /// This method cancels the network path monitoring and cleans up resources.
     deinit {
         stopMonitoring()
     }
     
+    /// Starts monitoring network status.
+    ///
+    /// Sets the `NWPathMonitor`'s path update handler to update the internet connection status whenever a network change is detected.
     private func startMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
             Task { @MainActor in
@@ -63,10 +91,18 @@ public final class SCRNetworkingMonitor: Sendable {
         monitor.start(queue: monitorQueue)
     }
     
+    /// Stops monitoring network status.
+    ///
+    /// This method cancels the `NWPathMonitor` and stops receiving network status updates.
     private func stopMonitoring() {
         monitor.cancel()
     }
     
+    /// Updates the connection status based on the provided network path.
+    ///
+    /// This method is called on the main thread to ensure thread safety when updating the connection status.
+    ///
+    /// - Parameter path: The `NWPath` object containing the latest network status information.
     @MainActor
     private func updateConnectionStatus(path: NWPath) {
         _isConnectedToInternet.store(path.status == .satisfied, ordering: .sequentiallyConsistent)

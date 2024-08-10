@@ -1,5 +1,5 @@
 //
-//  Networking.swift
+//  Validation.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,31 +31,27 @@
 
 import Foundation
 
-/// A protocol that defines network operations for fetching and requesting data.
-///
-/// The `Networking` protocol outlines the methods required to perform network requests and handle
-/// responses asynchronously. It supports fetching and decoding data from a specified endpoint,
-/// as well as performing raw network requests.
-@available(iOS 18.0, macOS 15.0, *)
-public protocol Networking: AnyObject {
+/// A utility class for common data validation tasks.
+public final class Validation {
+    /// Validates if the given string is a valid email address.
+    ///
+    /// - Parameter email: The email address to validate.
+    /// - Returns: A boolean indicating whether the email address is valid.
+    public static func isValidEmail(_ email: String) -> Bool {
+        let regex = try! NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Z]{2,}", options: .caseInsensitive)
+        let matches = regex.matches(in: email, options: [], range: NSRange(location: 0, length: email.count))
+        return matches.count > 0
+    }
     
-    /// Fetches and decodes data from the specified endpoint into a Swift type.
+    /// Validates if the given string is a strong password.
     ///
-    /// This method performs a network request to the provided endpoint, waits for the response, and
-    /// then decodes the response data into the specified type.
+    /// A strong password is defined as having at least 8 characters, including one uppercase letter, one lowercase letter, and one number.
     ///
-    /// - Parameter endpoint: The `Endpoint` object representing the network request details.
-    /// - Returns: A `T` instance, which is the decoded data of type `T`.
-    /// - Throws: An error if the network request fails or if decoding fails.
-    func fetch<T: Decodable>(_ endpoint: Endpoint) async throws -> T
-    
-    /// Performs a network request to the specified endpoint and returns the raw data.
-    ///
-    /// This method performs a network request to the provided endpoint and checks if the response
-    /// status code indicates success (200-299). It returns the raw data from the response.
-    ///
-    /// - Parameter endpoint: The `Endpoint` object representing the network request details.
-    /// - Returns: The raw data received from the network request.
-    /// - Throws: An error if the network request fails or if the response status code indicates a failure.
-    func request(_ endpoint: Endpoint) async throws -> Data
+    /// - Parameter password: The password to validate.
+    /// - Returns: A boolean indicating whether the password is strong.
+    public static func isStrongPassword(_ password: String) -> Bool {
+        let regex = try! NSRegularExpression(pattern: "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}", options: [])
+        let matches = regex.matches(in: password, options: [], range: NSRange(location: 0, length: password.count))
+        return matches.count > 0
+    }
 }
