@@ -32,6 +32,28 @@
 import Foundation
 
 /// A utility class for posting and observing notifications in a type-safe manner.
+///
+/// The `NotificationCenterManager` class provides a convenient and type-safe way to post and observe notifications.
+/// It encapsulates interactions with `NotificationCenter` to simplify posting notifications and adding observers.
+///
+/// Example usage:
+/// ```swift
+/// let notificationManager = NotificationCenterManager()
+///
+/// // Posting a notification
+/// notificationManager.post(name: .didUpdateData, userInfo: ["key": "value"])
+///
+/// // Adding an observer
+/// notificationManager.addObserver(for: .didUpdateData) { notification in
+///     if let userInfo = notification.userInfo {
+///         print("Received notification with userInfo: \(userInfo)")
+///     }
+/// }
+///
+/// // Removing all observers (e.g., during deinitialization)
+/// notificationManager.removeAllObservers()
+/// ```
+@available(iOS 18.0, macOS 15.0, *)
 public final class NotificationCenterManager {
     private let notificationCenter = NotificationCenter.default
     
@@ -61,7 +83,10 @@ public final class NotificationCenterManager {
         notificationCenter.addObserver(forName: name, object: nil, queue: queue, using: block)
     }
     
-    /// Removes all observers.
+    /// Removes all observers from the notification center.
+    ///
+    /// This method is useful for cleaning up and removing all observers, particularly during deinitialization
+    /// to avoid potential retain cycles or unexpected behavior.
     public func removeAllObservers() {
         notificationCenter.removeObserver(self)
     }

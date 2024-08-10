@@ -34,6 +34,14 @@ import Foundation
 
 @available(iOS 18.0, macOS 15.0, *)
 public extension ManagedAtomic where Value: Numeric {
+    
+    /// Atomically increments the current value by 1.
+    ///
+    /// This method repeatedly attempts to increment the value of the `ManagedAtomic` instance by 1,
+    /// using a compare-and-exchange operation to ensure atomicity and prevent race conditions.
+    ///
+    /// The increment operation will continue until it successfully updates the value without encountering
+    /// any conflicts with other concurrent updates.
     func increment() {
         while true {
             let currentValue = self.load(ordering: .sequentiallyConsistent)
@@ -44,6 +52,13 @@ public extension ManagedAtomic where Value: Numeric {
         }
     }
     
+    /// Atomically decrements the current value by 1.
+    ///
+    /// This method repeatedly attempts to decrement the value of the `ManagedAtomic` instance by 1,
+    /// using a compare-and-exchange operation to ensure atomicity and prevent race conditions.
+    ///
+    /// The decrement operation will continue until it successfully updates the value without encountering
+    /// any conflicts with other concurrent updates.
     func decrement() {
         while true {
             let currentValue = self.load(ordering: .sequentiallyConsistent)
@@ -54,6 +69,15 @@ public extension ManagedAtomic where Value: Numeric {
         }
     }
     
+    /// Atomically adds a specified value to the current value.
+    ///
+    /// This method repeatedly attempts to add the given value to the `ManagedAtomic` instance's current value,
+    /// using a compare-and-exchange operation to ensure atomicity and prevent race conditions.
+    ///
+    /// The addition operation will continue until it successfully updates the value without encountering
+    /// any conflicts with other concurrent updates.
+    ///
+    /// - Parameter value: The value to add to the current value.
     func add(_ value: Value) {
         while true {
             let currentValue = self.load(ordering: .sequentiallyConsistent)
@@ -64,6 +88,15 @@ public extension ManagedAtomic where Value: Numeric {
         }
     }
     
+    /// Atomically subtracts a specified value from the current value.
+    ///
+    /// This method repeatedly attempts to subtract the given value from the `ManagedAtomic` instance's current value,
+    /// using a compare-and-exchange operation to ensure atomicity and prevent race conditions.
+    ///
+    /// The subtraction operation will continue until it successfully updates the value without encountering
+    /// any conflicts with other concurrent updates.
+    ///
+    /// - Parameter value: The value to subtract from the current value.
     func subtract(_ value: Value) {
         while true {
             let currentValue = self.load(ordering: .sequentiallyConsistent)
@@ -77,6 +110,17 @@ public extension ManagedAtomic where Value: Numeric {
 
 @available(iOS 18.0, macOS 15.0, *)
 public extension ManagedAtomic where Value: Sendable {
+    
+    /// Asynchronously applies a transformation function to the current value.
+    ///
+    /// This method uses a detached task to apply a specified transformation function to the `ManagedAtomic`
+    /// instance's current value. The transformation is applied atomically to ensure that concurrent updates
+    /// are handled correctly.
+    ///
+    /// The function will be retried until the transformation is successfully applied without conflicts.
+    ///
+    /// - Parameter mutate: A sendable closure that takes the current value and returns a new value.
+    /// - Note: The closure should be `@Sendable` to ensure it can be safely used in asynchronous tasks.
     func asyncMutate(_ mutate: @Sendable @escaping (Value) -> Value) async {
         await withCheckedContinuation { continuation in
             Task.detached(priority: .medium) {

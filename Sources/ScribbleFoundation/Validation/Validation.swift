@@ -32,11 +32,30 @@
 import Foundation
 
 /// A utility class for common data validation tasks.
-public final class Validation {
+///
+/// This class provides static methods for validating common data types such as email addresses and passwords.
+/// It uses regular expressions to perform the validations and ensure the data meets the specified criteria.
+///
+/// You can use Validation as following:
+/// ```swift
+/// let isEmailValid = Validation.isValidEmail("example@domain.com")
+/// let isPasswordStrong = Validation.isStrongPassword("Password123")
+/// ```
+@available(iOS 18.0, macOS 15.0, *)
+public final class Validation: Validatable {
+    
     /// Validates if the given string is a valid email address.
+    ///
+    /// The method uses a regular expression to check if the email address conforms to a standard format.
     ///
     /// - Parameter email: The email address to validate.
     /// - Returns: A boolean indicating whether the email address is valid.
+    ///
+    /// The regular expression pattern used is:
+    /// ```
+    /// [A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Z]{2,}
+    /// ```
+    /// This pattern matches common email address formats and is case insensitive.
     public static func isValidEmail(_ email: String) -> Bool {
         let regex = try! NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Z]{2,}", options: .caseInsensitive)
         let matches = regex.matches(in: email, options: [], range: NSRange(location: 0, length: email.count))
@@ -45,10 +64,18 @@ public final class Validation {
     
     /// Validates if the given string is a strong password.
     ///
-    /// A strong password is defined as having at least 8 characters, including one uppercase letter, one lowercase letter, and one number.
+    /// A strong password is defined as having at least 8 characters, including one uppercase letter,
+    /// one lowercase letter, and one number.
     ///
     /// - Parameter password: The password to validate.
     /// - Returns: A boolean indicating whether the password is strong.
+    ///
+    /// The regular expression pattern used is:
+    /// ```
+    /// (?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}
+    /// ```
+    /// This pattern ensures that the password includes at least one lowercase letter, one uppercase letter,
+    /// and one digit, and is at least 8 characters long.
     public static func isStrongPassword(_ password: String) -> Bool {
         let regex = try! NSRegularExpression(pattern: "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}", options: [])
         let matches = regex.matches(in: password, options: [], range: NSRange(location: 0, length: password.count))

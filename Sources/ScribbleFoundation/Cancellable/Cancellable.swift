@@ -1,5 +1,5 @@
 //
-//  SCRLog+Extension.swift
+//  Cancellable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,50 +31,31 @@
 
 import Foundation
 
+/// A protocol for managing cancellable tasks.
+///
+/// This protocol defines methods for canceling tasks and checking their cancellation status.
+/// It can be useful for handling asynchronous tasks that may need to be canceled before completion.
 @available(iOS 18.0, macOS 15.0, *)
-public extension SCRLog {
+public protocol Cancellable {
+    /// Cancels the task.
+    ///
+    /// This method should be called to terminate the ongoing task or operation. Implementations
+    ///  should ensure that the task is properly stopped and any resources are released.
+    func cancel()
     
-    /// Logs a custom message with a specific log level.
+    /// A boolean indicating whether the task has been cancelled.
     ///
-    /// This method creates a `Logger` instance with the specified category and logs the provided message with the given log level prefix.
-    ///
-    /// - Parameters:
-    ///   - message: The message to log.
-    ///   - level: The log level to use for the message.
-    func log(_ message: String, with level: LogLevel) {
-        let logger = self.logger(for: level.category)
-        logger.log("\(level.prefix): \(message)")
-    }
+    /// - Returns: A boolean value `true` if the task has been cancelled, otherwise `false`.
+    func isCancelled() -> Bool
     
-    /// Enumeration of custom log levels.
+    /// Registers a callback to be executed when the task is cancelled.
     ///
-    /// Custom log levels help to define additional granularity for log messages.
-    enum LogLevel {
-        case info
-        case trace
-        
-        /// Returns the category and prefix for the log level.
-        ///
-        /// This computed property maps each log level to a specific `Category` and provides a corresponding log level prefix.
-        ///
-        /// - Returns: The `Category` and log level prefix associated with the log level.
-        var category: Category {
-            switch self {
-            case .info: return .log
-            case .trace: return .debug
-            }
-        }
-        
-        /// The prefix for the log level.
-        ///
-        /// This computed property provides a string prefix that identifies the log level (e.g., "INFO" for info level, "TRACE" for trace level).
-        ///
-        /// - Returns: The string prefix for the log level.
-        var prefix: String {
-            switch self {
-            case .info: return "INFO"
-            case .trace: return "TRACE"
-            }
-        }
-    }
+    /// - Parameter callback: A closure to be executed when the task is cancelled.
+    func onCancel(_ callback: @escaping () -> Void)
+    
+    /// Resumes the task if it was paused or interrupted due to cancellation.
+    ///
+    /// - Throws: An error if the task cannot be resumed.
+    /// - Note: This method is optional and only applicable if the implementation supports resuming tasks.
+    func resume() throws
 }

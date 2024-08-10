@@ -38,18 +38,29 @@ public extension APIEndpoint {
     /// This enum provides a type-safe way to specify HTTP methods, reducing the chance of errors
     /// that might occur with raw string literals. Each case in the enum corresponds to a common HTTP method.
     enum MethodType {
+        
+        /// Represents the HTTP GET method used for retrieving resources.
         case get
+        
+        /// Represents the HTTP POST method used for submitting data to be processed.
         case post
+        
+        /// Represents the HTTP PUT method used for updating resources.
         case put
+        
+        /// Represents the HTTP PATCH method used for partially updating resources.
         case patch
+        
+        /// Represents the HTTP DELETE method used for removing resources.
         case delete
         
         /// A computed property that returns the string representation of the HTTP method.
         ///
         /// This property converts the enum case to the corresponding HTTP method string,
-        /// which can be used to configure the `URLRequest` object.
+        /// which can be used to configure the `URLRequest` object. This ensures that
+        /// the HTTP method is represented as a valid string for network requests.
         ///
-        /// - Returns: A string representing the HTTP method.
+        /// - Returns: A string representing the HTTP method, such as "GET", "POST", "PUT", "PATCH", or "DELETE".
         var requestString: String {
             switch self {
             case .get: return "GET"

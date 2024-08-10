@@ -37,6 +37,9 @@ public extension View {
     
     /// Logs a block of code with optional context information.
     ///
+    /// This extension provides a way to execute and log a block of code when the view appears on the screen.
+    /// It's useful for debugging or tracking specific events associated with a view's lifecycle.
+    ///
     /// Example usage:
     /// ```swift
     /// SomeSwiftUIView()
@@ -45,8 +48,8 @@ public extension View {
     ///     }
     /// ```
     ///
-    /// - Parameter closure: The block of code to be logged.
-    /// - Returns: A view that logs the provided closure when executed.
+    /// - Parameter closure: A block of code to be executed and logged when the view appears.
+    /// - Returns: A view that logs the provided closure when the view appears.
     func scrLog(_ closure: @escaping () -> Void) -> some View {
         return self
             .onAppear {

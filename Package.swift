@@ -7,7 +7,6 @@ let package = Package(
     name: "ScribbleFoundation",
     platforms: [.macOS(.v15), .iOS(.v18), .tvOS(.v18), .watchOS(.v11), .macCatalyst(.v18)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "ScribbleFoundation",
             targets: ["ScribbleFoundation"]),
@@ -21,11 +20,14 @@ let package = Package(
     targets: [
         .target(
             name: "ScribbleFoundation",
-            dependencies: []
+            dependencies: [
+                .product(name: "Atomics", package: "swift-atomics")
+            ]
         ),
         .testTarget(
             name: "ScribbleFoundationTests",
             dependencies: [
+                "ScribbleFoundation",
                 .product(name: "Atomics", package: "swift-atomics")
             ]
         ),

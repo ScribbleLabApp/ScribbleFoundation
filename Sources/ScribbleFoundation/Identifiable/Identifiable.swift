@@ -31,8 +31,27 @@
 
 import Foundation
 
+
 /// A protocol for objects with a unique identifier.
-public protocol Identifiable {
+///
+/// Conforming types must provide a unique `UUID` that serves as the identifier for the object.
+/// This protocol is useful for ensuring that objects can be uniquely identified, which is beneficial
+/// in contexts such as data management, UI state tracking, and more.
+///
+/// Example usage:
+/// ```swift
+/// struct User: _Identifiable {
+///     let id: UUID
+///     let name: String
+/// }
+/// ```
+///
+/// In this example, `User` conforms to `Identifiable`, and each `User` instance has a unique `id`
+/// that can be used to identify it distinctly.
+@available(iOS 18.0, macOS 15.0, *)
+public protocol _Identifiable {
     /// The unique identifier for the object.
+    ///
+    /// - Returns: A `UUID` that uniquely identifies the object.
     var id: UUID { get }
 }

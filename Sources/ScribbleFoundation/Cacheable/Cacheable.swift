@@ -1,5 +1,5 @@
 //
-//  SCRLog+Extension.swift
+//  Cacheable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,50 +31,33 @@
 
 import Foundation
 
+/// A protocol for objects that support caching functionality.
+///
+/// Conforming types implement methods to cache objects, retrieve them by key, and remove them from the cache.
+/// This is useful for implementing various caching mechanisms, such as in-memory or persistent storage caches.
 @available(iOS 18.0, macOS 15.0, *)
-public extension SCRLog {
+public protocol Cacheable {
+    associatedtype Key
+    associatedtype Value
     
-    /// Logs a custom message with a specific log level.
-    ///
-    /// This method creates a `Logger` instance with the specified category and logs the provided message with the given log level prefix.
+    /// Caches an object with the specified key.
     ///
     /// - Parameters:
-    ///   - message: The message to log.
-    ///   - level: The log level to use for the message.
-    func log(_ message: String, with level: LogLevel) {
-        let logger = self.logger(for: level.category)
-        logger.log("\(level.prefix): \(message)")
-    }
+    ///   - key: The key to cache the object with. This key is used to uniquely identify the cached object.
+    ///   - value: The object to cache. This is the value that will be associated with the key in the cache.
+    /// - Note: Caching an object with the same key more than once will overwrite the existing cached object.
+    func cache(key: Key, value: Value)
     
-    /// Enumeration of custom log levels.
+    /// Retrieves a cached object for the specified key.
     ///
-    /// Custom log levels help to define additional granularity for log messages.
-    enum LogLevel {
-        case info
-        case trace
-        
-        /// Returns the category and prefix for the log level.
-        ///
-        /// This computed property maps each log level to a specific `Category` and provides a corresponding log level prefix.
-        ///
-        /// - Returns: The `Category` and log level prefix associated with the log level.
-        var category: Category {
-            switch self {
-            case .info: return .log
-            case .trace: return .debug
-            }
-        }
-        
-        /// The prefix for the log level.
-        ///
-        /// This computed property provides a string prefix that identifies the log level (e.g., "INFO" for info level, "TRACE" for trace level).
-        ///
-        /// - Returns: The string prefix for the log level.
-        var prefix: String {
-            switch self {
-            case .info: return "INFO"
-            case .trace: return "TRACE"
-            }
-        }
-    }
+    /// - Parameter key: The key to retrieve the object for. This key is used to look up the cached object.
+    /// - Returns: The cached object associated with the key, or `nil` if no object is found for the given key.
+    /// - Note: If the key does not exist in the cache, this method returns `nil`.
+    func retrieve(for key: Key) -> Value?
+    
+    /// Removes a cached object for the specified key.
+    ///
+    /// - Parameter key: The key to remove the cached object for. This key is used to locate and remove the object from the cache.
+    /// - Note: If the key does not exist in the cache, this method has no effect.
+    func remove(for key: Key)
 }

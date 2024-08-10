@@ -32,10 +32,23 @@
 import Foundation
 
 /// A protocol for objects that can be serialized and deserialized.
+///
+/// Conforming types must support encoding to and decoding from a JSON format.
+/// This protocol extends `Codable` to provide additional methods for converting to and from JSON strings.
+///
+@available(iOS 18.0, macOS 15.0, *)
 public protocol Serializable: Codable {
+    
     /// Converts the object to a JSON string.
+    ///
+    /// - Returns: A JSON string representation of the object.
+    /// - Throws: An error if encoding to JSON fails.
     func toJSON() throws -> String
     
     /// Initializes the object from a JSON string.
+    ///
+    /// - Parameter json: A JSON string representation of the object.
+    /// - Returns: An instance of the conforming type initialized with the JSON data.
+    /// - Throws: An error if decoding from JSON fails.
     static func fromJSON(_ json: String) throws -> Self
 }

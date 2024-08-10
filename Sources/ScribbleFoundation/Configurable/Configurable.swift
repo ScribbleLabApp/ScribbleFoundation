@@ -1,5 +1,5 @@
 //
-//  SendableString+Extension.swift
+//  Configurable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -29,53 +29,42 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import Atomics
 import Foundation
 
+/// A protocol for loading and applying configuration settings.
+///
+/// This protocol defines methods for loading configuration settings from a source, applying them,
+/// validating them, and resetting to default values. It provides a robust way to manage configurations
+/// in an application.
 @available(iOS 18.0, macOS 15.0, *)
-public extension SendableString {
+public protocol Configurable {
+    /// Loads configuration settings from a source.
+    ///
+    /// - Parameter source: The source of the configuration data, typically a URL pointing to a configuration file or service.
+    /// - Throws: An error if the configuration could not be loaded.
+    func loadConfiguration(from source: URL) async throws
     
-    /// Appends a string to the current string asynchronously.
+    /// Applies the loaded configuration settings.
     ///
-    /// This method modifies the current string by appending the provided string to it.
-    ///
-    /// - Parameter string: The string to append to the current string.
-    func append(_ string: String) async {
-        await asyncMutate { current in
-            current + string
-        }
-    }
+    /// - Throws: An error if the configuration could not be applied.
+    func applyConfiguration() throws
     
-    /// Prepends a string to the current string asynchronously.
+    /// Validates the loaded configuration settings.
     ///
-    /// This method modifies the current string by prepending the provided string to it.
+    /// This method checks if the loaded configuration meets the necessary criteria for correctness and completeness.
     ///
-    /// - Parameter string: The string to prepend to the current string.
-    func prepend(_ string: String) async {
-        await asyncMutate { current in
-            string + current
-        }
-    }
+    /// - Returns: A boolean indicating whether the configuration is valid.
+    /// - Throws: An error if the validation process encounters issues.
+    func validateConfiguration() throws -> Bool
     
-    /// Replaces occurrences of a target string with a replacement string asynchronously.
+    /// Resets the configuration settings to their default values.
     ///
-    /// This method modifies the current string by replacing all occurrences of the target string with the replacement string.
-    ///
-    /// - Parameters:
-    ///   - target: The substring to replace.
-    ///   - replacement: The string to replace the target with.
-    func replace(_ target: String, with replacement: String) async {
-        await asyncMutate { current in
-            current.replacingOccurrences(of: target, with: replacement)
-        }
-    }
+    /// This method clears any applied configurations and restores the system to its default configuration state.
+    func resetToDefaults()
     
-    /// Trims whitespace and newline characters from the current string asynchronously.
+    /// Loads configuration settings from a provided data object.
     ///
-    /// This method modifies the current string by removing leading and trailing whitespace and newline characters.
-    func trim() async {
-        await asyncMutate { current in
-            current.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-    }
+    /// - Parameter data: The data object containing configuration settings, typically in JSON, XML, or another format.
+    /// - Throws: An error if the configuration could not be loaded from the data object.
+    func loadConfiguration(from data: Data) async throws
 }

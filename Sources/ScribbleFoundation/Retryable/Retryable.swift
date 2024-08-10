@@ -1,5 +1,5 @@
 //
-//  SendableString+Extension.swift
+//  Retryable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -29,53 +29,39 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import Atomics
 import Foundation
 
+/// A protocol for objects that can perform retryable operations.
+///
+/// Conforming types implement retry logic to handle operations that may need to be retried
+/// upon failure. This protocol provides properties to configure the number of retry attempts
+/// and the interval between each attempt.
+///
+/// Example use case includes network requests that should be retried upon failure.
 @available(iOS 18.0, macOS 15.0, *)
-public extension SendableString {
+public protocol Retryable {
     
-    /// Appends a string to the current string asynchronously.
+    /// Number of retry attempts.
     ///
-    /// This method modifies the current string by appending the provided string to it.
-    ///
-    /// - Parameter string: The string to append to the current string.
-    func append(_ string: String) async {
-        await asyncMutate { current in
-            current + string
-        }
-    }
+    /// This property specifies the maximum number of times an operation will be retried if it fails.
+    /// The default value is usually set to a reasonable number depending on the use case.
+    var retryAttempts: Int { get set }
     
-    /// Prepends a string to the current string asynchronously.
+    /// Interval between retry attempts.
     ///
-    /// This method modifies the current string by prepending the provided string to it.
-    ///
-    /// - Parameter string: The string to prepend to the current string.
-    func prepend(_ string: String) async {
-        await asyncMutate { current in
-            string + current
-        }
-    }
+    /// This property defines the duration to wait between consecutive retry attempts.
+    /// The value is specified in seconds. A higher interval can reduce the frequency of retries,
+    /// while a lower interval may increase the retry rate.
+    var retryInterval: TimeInterval { get set }
     
-    /// Replaces occurrences of a target string with a replacement string asynchronously.
+    /// Executes a retryable operation.
     ///
-    /// This method modifies the current string by replacing all occurrences of the target string with the replacement string.
+    /// This method will attempt to execute the provided asynchronous operation. If the operation fails,
+    /// it will be retried up to the specified number of times with the specified interval between attempts.
     ///
-    /// - Parameters:
-    ///   - target: The substring to replace.
-    ///   - replacement: The string to replace the target with.
-    func replace(_ target: String, with replacement: String) async {
-        await asyncMutate { current in
-            current.replacingOccurrences(of: target, with: replacement)
-        }
-    }
-    
-    /// Trims whitespace and newline characters from the current string asynchronously.
-    ///
-    /// This method modifies the current string by removing leading and trailing whitespace and newline characters.
-    func trim() async {
-        await asyncMutate { current in
-            current.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-    }
+    /// - Parameter operation: A closure representing the operation to be retried. This closure is an
+    ///   asynchronous function that can throw an error. The closure returns a value of type `T`.
+    /// - Returns: The result of the operation if successful.
+    /// - Throws: The error thrown by the operation if it fails after the maximum number of retries.
+    func retry<T>(_ operation: () async throws -> T) async throws -> T
 }

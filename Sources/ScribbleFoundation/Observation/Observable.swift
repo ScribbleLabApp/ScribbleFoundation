@@ -1,5 +1,5 @@
 //
-//  SCRLog+Extension.swift
+//  Observable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,50 +31,35 @@
 
 import Foundation
 
+/// A protocol for objects that can notify observers about changes in their state.
+///
+/// Conforming types can have a state that observers can subscribe to. When the state changes,
+/// observers will be notified to react to the change.
 @available(iOS 18.0, macOS 15.0, *)
-public extension SCRLog {
+public protocol Observable {
     
-    /// Logs a custom message with a specific log level.
-    ///
-    /// This method creates a `Logger` instance with the specified category and logs the provided message with the given log level prefix.
-    ///
-    /// - Parameters:
-    ///   - message: The message to log.
-    ///   - level: The log level to use for the message.
-    func log(_ message: String, with level: LogLevel) {
-        let logger = self.logger(for: level.category)
-        logger.log("\(level.prefix): \(message)")
-    }
+    /// The type representing the state of the observable object.
+    associatedtype State
     
-    /// Enumeration of custom log levels.
+    /// The current state of the observable object.
     ///
-    /// Custom log levels help to define additional granularity for log messages.
-    enum LogLevel {
-        case info
-        case trace
-        
-        /// Returns the category and prefix for the log level.
-        ///
-        /// This computed property maps each log level to a specific `Category` and provides a corresponding log level prefix.
-        ///
-        /// - Returns: The `Category` and log level prefix associated with the log level.
-        var category: Category {
-            switch self {
-            case .info: return .log
-            case .trace: return .debug
-            }
-        }
-        
-        /// The prefix for the log level.
-        ///
-        /// This computed property provides a string prefix that identifies the log level (e.g., "INFO" for info level, "TRACE" for trace level).
-        ///
-        /// - Returns: The string prefix for the log level.
-        var prefix: String {
-            switch self {
-            case .info: return "INFO"
-            case .trace: return "TRACE"
-            }
-        }
-    }
+    /// This property holds the state that observers are interested in.
+    /// Observers can be notified when this state changes.
+    var state: State { get }
+    
+    /// Adds an observer to receive updates about changes in the state.
+    ///
+    /// - Parameter observer: An instance of a type conforming to `Observer` that will receive
+    ///   notifications about state changes.
+    ///
+    /// Adding an observer will ensure that it receives updates when the state changes.
+    func addObserver(_ observer: any Observer)
+    
+    /// Removes an observer so it no longer receives updates about state changes.
+    ///
+    /// - Parameter observer: An instance of a type conforming to `Observer` that will no longer
+    ///   receive notifications about state changes.
+    ///
+    /// Removing an observer will stop it from receiving any further updates about state changes.
+    func removeObserver(_ observer: any Observer)
 }

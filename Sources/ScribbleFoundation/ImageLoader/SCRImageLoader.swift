@@ -39,14 +39,33 @@ import AppKit
 public typealias _Image = NSImage
 #endif
 
-/// A utility class for asynchronously loading images from URLs.
+/// A utility class for asynchronously loading and caching images from URLs.
+///
+/// This class provides functionality to load images from network URLs and cache them to avoid redundant network requests.
+/// It supports both iOS and macOS by using platform-specific image types: `UIImage` on iOS and `NSImage` on macOS.
+///
+/// - Note: This class uses `NSCache` for in-memory caching of images. Cached images are identified by their URL strings.
+///
+/// Example usage:
+/// ```swift
+/// let imageLoader = ImageLoader()
+/// Task {
+///     if let image = await imageLoader.load(from: URL(string: "https://example.com/image.png")!) {
+///         // Use the loaded image
+///     }
+/// }
+/// ```
+@available(iOS 18.0, macOS 15.0, *)
 public final class ImageLoader {
     private let cache = NSCache<NSString, _Image>()
     
-    /// Loads an image from the specified URL.
+    /// Loads an image from the specified URL asynchronously.
+    ///
+    /// First, checks if the image is already cached. If not, it fetches the image data from the URL, creates an image,
+    /// caches it, and then returns it.
     ///
     /// - Parameter url: The URL of the image to load.
-    /// - Returns: A `_Image` if the image is successfully loaded, otherwise `nil`.
+    /// - Returns: An optional `_Image`. Returns the image if successfully loaded and cached; otherwise, returns `nil`.
     public func load(from url: URL) async -> _Image? {
         if let cachedImage = cache.object(forKey: url.absoluteString as NSString) {
             return cachedImage

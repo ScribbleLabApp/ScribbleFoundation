@@ -35,12 +35,22 @@ import ObjectiveC
 #if os(macOS)
 @available(macOS 15.0, *)
 public extension Process {
+    
+    /// An enumeration representing errors that can occur during process execution.
+    ///
+    /// This enum is used to categorize different types of errors that may arise when launching or
+    /// interacting with a process. It provides specific error cases for process exit statuses, signals,
+    /// IO errors, and invalid process states.
     enum LaunchError: Swift.Error {
         case exit(Int32)
         case signal(Int32)
         case ioError(Int32)
         case invalidProcessState
         
+        /// Initializes a `LaunchError` based on the termination status of a process.
+        ///
+        /// - Parameter process: The `Process` instance whose termination status is evaluated.
+        /// - Returns: An optional `LaunchError` if the termination status indicates an error; otherwise, `nil`.
         init?(terminationOf process: Process) {
             switch process.terminationReason {
             case .exit where process.terminationStatus != 0:
@@ -53,25 +63,29 @@ public extension Process {
         }
     }
     
-    /// Launches process allowing interaction in async environment
+    /// Launches a process and allows for asynchronous interaction with its standard input, output, and error streams.
     ///
     /// - Parameters:
-    ///   - queue: A queue to be used for IO scheduling
-    ///   - reportInterval: Maximum output report interval. if set, stdout and stderr streams will yield empty elements through given intervals even if no data available.
-    ///   - build: a block to use for building interaction. As soon as your block returns, the process input stream is closed.
-    /// - Returns: result of build operation
+    ///   - queue: An optional `DispatchQueue` for scheduling IO operations.
+    ///   - reportInterval: An optional `DispatchTimeInterval` specifying the maximum interval for
+    ///                     reporting output. If set, `stdout` and `stderr` streams will yield empty
+    ///                     elements at this interval even if no data is available.
+    ///   - build: A closure that defines the interaction with the process. This closure provides async functions
+    ///            for writing to the process's standard input and reading from its standard output and error streams.
+    /// - Returns: The result of the `build` operation.
+    ///
     /// # Example #
-    /// simplified usage:
+    /// Simplified usage:
     /// ```
     /// let output: AsyncThrowingOutputStream<Data, any Error> = try await process.launch()
     /// ```
-    /// extended usage:
+    /// Extended usage:
     /// ```
-    /// try await process.launch(reportInterval: .seconds(1)) { input, output, error in {
-    ///     try await input(Data()) // write arbitraty data to process input
-    ///     for try await data in output { /* ... */ } // read process output
-    ///     for try await data in error { /* ... */ }  // read process error
-    ///     // at this point, process input is closed. `output` and `error` streams, however, may escape.
+    /// try await process.launch(reportInterval: .seconds(1)) { input, output, error in
+    ///     try await input(Data()) // Write arbitrary data to process input
+    ///     for try await data in output { /* Handle process output */ }
+    ///     for try await data in error { /* Handle process error */ }
+    ///     // Process input is closed at this point. `output` and `error` streams may still have data.
     /// }
     /// ```
     func launch<R>(
@@ -191,10 +205,20 @@ public extension Process {
 
 @available(macOS 15.0, *)
 private extension Data {
+    
+    /// Converts a `Data` object to `DispatchData`.
+    ///
+    /// This conversion allows `Data` to be used with `DispatchIO`, which requires `DispatchData` for
+    /// input/output operations.
+    ///
+    /// - Returns: A `DispatchData` representation of the `Data` object.
     var dispatchData: DispatchData {
         self as NSObject as? DispatchData ?? self.withUnsafeBytes(DispatchData.init(bytes:))
     }
     
+    /// Initializes a `Data` object from `DispatchData`.
+    ///
+    /// - Parameter dispatchData: The `DispatchData` to convert into a `Data` object.
     init(dispatchData: DispatchData) {
         if let nsdata = dispatchData as NSObject as? NSData {
             self.init(referencing: nsdata)

@@ -37,8 +37,13 @@ extension SwiftUI.Binding {
     
     /// Creates a binding with the specified value.
     ///
+    /// This initializer creates a new `Binding` instance where the value is immutable (read-only).
+    /// The returned binding has a `get` closure that returns the provided value and a `set` closure
+    /// that does nothing. This can be useful for cases where you need a `Binding` that should only
+    /// provide a value and not allow modification.
+    ///
     /// - Parameter value: The initial value for the binding.
-    /// - Returns: A new `Binding` instance.
+    /// - Returns: A new `Binding` instance with the specified value.
     public static func createBinding<T: Sendable>(with value: T) -> SwiftUI.Binding<T> {
         let immutableValue = value
         return .init(get: { immutableValue }, set: { _ in })
@@ -46,10 +51,15 @@ extension SwiftUI.Binding {
     
     /// Creates a binding that uses the provided getter and setter closures.
     ///
+    /// This initializer creates a new `Binding` instance using custom getter and setter closures.
+    /// The `get` closure returns the current value, and the `set` closure updates the value. This can
+    /// be used to create a binding that interacts with state in a custom manner, allowing for both
+    /// reading and writing of the value.
+    ///
     /// - Parameters:
-    ///   - get: A closure that returns the current value.
-    ///   - set: A closure that updates the value.
-    /// - Returns: A new `Binding` instance.
+    ///   - get: A closure that returns the current value of the binding.
+    ///   - set: A closure that updates the value of the binding.
+    /// - Returns: A new `Binding` instance with the provided getter and setter closures.
     public static func createBinding(
         variable get: @escaping @Sendable () -> Value,
         set: @escaping @Sendable (Value) -> Void

@@ -1,5 +1,5 @@
 //
-//  SCRLog+Extension.swift
+//  Validatable.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,50 +31,30 @@
 
 import Foundation
 
+/// A protocol for objects that can validate their state or data.
+///
+/// Conforming types implement a validation mechanism to check the integrity, correctness, or compliance of their state or data.
+/// This is useful for ensuring that data or objects meet certain criteria before being processed or used.
 @available(iOS 18.0, macOS 15.0, *)
-public extension SCRLog {
+public protocol Validatable {
     
-    /// Logs a custom message with a specific log level.
+    /// Checks if the provided email address is valid.
     ///
-    /// This method creates a `Logger` instance with the specified category and logs the provided message with the given log level prefix.
+    /// This static method validates the format of an email address based on standard email formatting rules.
+    /// It is a utility function that can be used to determine if an email address meets common standards.
     ///
-    /// - Parameters:
-    ///   - message: The message to log.
-    ///   - level: The log level to use for the message.
-    func log(_ message: String, with level: LogLevel) {
-        let logger = self.logger(for: level.category)
-        logger.log("\(level.prefix): \(message)")
-    }
+    /// - Parameter email: The email address to validate.
+    /// - Returns: `true` if the email address is valid according to the formatting rules,
+    ///   or `false` otherwise.
+    static func isValidEmail(_ email: String) -> Bool
     
-    /// Enumeration of custom log levels.
+    /// Checks if the provided password is strong.
     ///
-    /// Custom log levels help to define additional granularity for log messages.
-    enum LogLevel {
-        case info
-        case trace
-        
-        /// Returns the category and prefix for the log level.
-        ///
-        /// This computed property maps each log level to a specific `Category` and provides a corresponding log level prefix.
-        ///
-        /// - Returns: The `Category` and log level prefix associated with the log level.
-        var category: Category {
-            switch self {
-            case .info: return .log
-            case .trace: return .debug
-            }
-        }
-        
-        /// The prefix for the log level.
-        ///
-        /// This computed property provides a string prefix that identifies the log level (e.g., "INFO" for info level, "TRACE" for trace level).
-        ///
-        /// - Returns: The string prefix for the log level.
-        var prefix: String {
-            switch self {
-            case .info: return "INFO"
-            case .trace: return "TRACE"
-            }
-        }
-    }
+    /// This static method evaluates the strength of a password based on common security criteria.
+    /// It typically involves checking for minimum length, inclusion of various character types, and other security measures.
+    ///
+    /// - Parameter password: The password to validate.
+    /// - Returns: `true` if the password meets the strength criteria,
+    ///   or `false` otherwise.
+    static func isStrongPassword(_ password: String) -> Bool
 }

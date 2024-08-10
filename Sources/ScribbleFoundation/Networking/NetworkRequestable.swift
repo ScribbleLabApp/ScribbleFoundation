@@ -31,11 +31,28 @@
 
 import Foundation
 
-/// A protocol for creating network requests.
+/// A protocol for creating and executing network requests.
+///
+/// Conforming types implement this protocol to specify how to create a `URLRequest` and execute the network request.
+/// The protocol defines a method for executing the request asynchronously and returning the response data.
+///
+/// - Note: The protocol is designed to be used with Swift's concurrency model, using `async` and `throws` for asynchronous
+///         execution and error handling.
+@available(iOS 18.0, macOS 15.0, *)
 public protocol NetworkRequestable {
-    /// Creates a URLRequest for the network request.
+    
+    /// Creates a `URLRequest` for the network request.
+    ///
+    /// This property provides the `URLRequest` that defines the details of the network request,
+    /// including the URL, HTTP method, headers, and body.
     var urlRequest: URLRequest { get }
     
     /// Executes the network request and returns the response data.
+    ///
+    /// This method performs the network request asynchronously and returns the data received in the response.
+    /// It throws an error if the request fails or if there is an issue with the response.
+    ///
+    /// - Returns: The response data as `Data`.
+    /// - Throws: An error if the network request fails or if the response is invalid.
     func execute() async throws -> Data
 }

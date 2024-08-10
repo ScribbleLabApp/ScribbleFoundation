@@ -32,14 +32,29 @@
 import Foundation
 
 /// A utility class for managing user defaults in a type-safe manner.
+///
+/// This class provides methods to save and retrieve `Codable` values to and from `UserDefaults`.
+/// It ensures that the values are encoded and decoded in a type-safe manner using `JSONEncoder` and `JSONDecoder`.
+///
+/// To store data in UserDefaults using UserDefaultsManager try this:
+/// ```swift
+/// let manager = UserDefaultsManager()
+/// manager.set("Hello, World!", forKey: "greeting")
+/// let greeting: String? = manager.get("greeting")
+/// ```
+///
+@available(iOS 18.0, macOS 15.0, *)
 public final class UserDefaultsManager {
     private let defaults = UserDefaults.standard
     
     /// Saves a value to user defaults.
     ///
     /// - Parameters:
-    ///   - value: The value to save.
+    ///   - value: The value to save. Must conform to `Codable`.
     ///   - key: The key to associate with the value.
+    ///
+    /// This method encodes the value using `JSONEncoder` and stores it in `UserDefaults` under the specified key.
+    /// If encoding fails, an error message is printed.
     public func set<T>(_ value: T, forKey key: String) where T: Codable {
         do {
             let data = try JSONEncoder().encode(value)
@@ -53,6 +68,9 @@ public final class UserDefaultsManager {
     ///
     /// - Parameter key: The key associated with the value.
     /// - Returns: The value if it exists and can be decoded, otherwise `nil`.
+    ///
+    /// This method retrieves data from `UserDefaults` for the specified key and decodes it using `JSONDecoder`.
+    /// If decoding fails, an error message is printed and `nil` is returned.
     public func get<T>(_ key: String) -> T? where T: Codable {
         guard let data = defaults.data(forKey: key) else { return nil }
         do {
