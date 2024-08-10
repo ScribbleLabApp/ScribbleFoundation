@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "ScribbleFoundation",
             targets: ["ScribbleFoundation"]),
+        .library(
+            name: "ScribbleFoundationUI",
+            targets: ["ScribbleFoundationUI"])
     ],
     dependencies: [
         .package(
@@ -23,6 +26,10 @@ let package = Package(
             dependencies: [
                 .product(name: "Atomics", package: "swift-atomics")
             ]
+        ),
+        .target(
+            name: "ScribbleFoundationUI",
+            path: "Sources/ScribbleFoundationUI"
         ),
         .testTarget(
             name: "ScribbleFoundationTests",
