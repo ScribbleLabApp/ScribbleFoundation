@@ -40,7 +40,10 @@ public final class NotificationCenterManager {
     /// - Parameters:
     ///   - name: The name of the notification.
     ///   - userInfo: Optional userInfo dictionary to include with the notification.
-    public func post(name: Notification.Name, userInfo: [AnyHashable: Any]? = nil) {
+    public func post(
+        name: Notification.Name,
+        userInfo: [AnyHashable: Any]? = nil
+    ) {
         notificationCenter.post(name: name, object: nil, userInfo: userInfo)
     }
     
@@ -50,7 +53,11 @@ public final class NotificationCenterManager {
     ///   - name: The name of the notification.
     ///   - observer: The observer to call when the notification is posted.
     ///   - queue: The operation queue to deliver the notification on. If `nil`, the main queue is used.
-    public func addObserver(for name: Notification.Name, using block: @Sendable @escaping (Notification) -> Void, queue: OperationQueue? = .main) {
+    public func addObserver(
+        for name: Notification.Name,
+        using block: @Sendable @escaping (Notification) -> Void,
+        queue: OperationQueue? = .main
+    ) {
         notificationCenter.addObserver(forName: name, object: nil, queue: queue, using: block)
     }
     
