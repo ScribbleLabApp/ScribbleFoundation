@@ -5,21 +5,29 @@ import PackageDescription
 
 let package = Package(
     name: "ScribbleFoundation",
-    platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
+    platforms: [.macOS(.v15), .iOS(.v18), .tvOS(.v18), .watchOS(.v11), .macCatalyst(.v18)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "ScribbleFoundation",
             targets: ["ScribbleFoundation"]),
     ],
+    dependencies: [
+        .package(
+            url: "https://github.com/apple/swift-atomics.git",
+            .upToNextMajor(from: "1.2.0")
+        )
+    ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "ScribbleFoundation"),
+            name: "ScribbleFoundation",
+            dependencies: []
+        ),
         .testTarget(
             name: "ScribbleFoundationTests",
-            dependencies: ["ScribbleFoundation"]
+            dependencies: [
+                .product(name: "Atomics", package: "swift-atomics")
+            ]
         ),
     ]
 )
