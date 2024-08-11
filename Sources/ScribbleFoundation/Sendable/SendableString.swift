@@ -39,7 +39,7 @@ import Foundation
 /// synchronization, ensuring thread-safe operations on the string value. This class also supports
 /// asynchronous mutations with the `asyncMutate` method.
 @available(iOS 18.0, macOS 15.0, *)
-public final class SendableString: Sendable {
+public final class SendableString: @unchecked Sendable {
     
     /// A concurrent dispatch queue used for thread-safe access and modifications.
     private let queue = DispatchQueue(label: "SendableStringQueue", attributes: .concurrent)

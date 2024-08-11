@@ -2,6 +2,23 @@
 
 A Powerful Foundation for ScribbleLab
 
+@Metadata {
+    @PageImage(
+        purpose: icon,
+        source: "ScribbleFoundation", 
+        alt: "A technology icon representing the ScribbleFoundation framework.")
+    @PageColor(blue)
+    
+    @Available(iOS, introduced: "18.0")
+    @Available(iPadOS, introduced: "18.0")
+    @Available(macOS, introduced: "15.0")
+    @Available(visionOS, introduced: "2.0")
+    
+    @Available(Swift, introduced: "6")
+    
+    @SupportedLanguage(swift)
+}
+
 ## Overview
 
 ScribbleFoundation is a Swift library designed to provide a set of foundational utilities and protocols for iOS and macOS applications. It includes various components such as rate limiting, auditing, validation, and more, aimed at improving code organization, consistency, and functionality.
@@ -9,6 +26,8 @@ ScribbleFoundation is a Swift library designed to provide a set of foundational 
 The ScribbleFoundation library offers a suite of protocols and utilities to help manage common tasks in software development. It includes protocols for rate limiting operations, auditing actions, validating data, and other essential functionalities that can be reused across different projects.
 
 ## Topics
+
+### Essentials
 
 ### Analytics & Logging
 
