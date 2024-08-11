@@ -39,13 +39,13 @@ import Foundation
 /// synchronization, ensuring thread-safe operations on the string value. This class also supports
 /// asynchronous mutations with the `asyncMutate` method.
 @available(iOS 18.0, macOS 15.0, *)
-public final class SendableString: @unchecked Sendable {
+public final class SendableString: Sendable {
     
     /// A concurrent dispatch queue used for thread-safe access and modifications.
     private let queue = DispatchQueue(label: "SendableStringQueue", attributes: .concurrent)
     
     /// The underlying string value that is being managed.
-    private var _value: String
+    @MainActor private var _value: String
     
     
     /// Initializes a new `SendableString` with the given initial value.
@@ -62,7 +62,7 @@ public final class SendableString: @unchecked Sendable {
     /// by using a concurrent dispatch queue.
     ///
     /// - Returns: The current string value.
-    public func get() -> String {
+    @MainActor public func get() -> String {
         queue.sync { _value }
     }
     
@@ -74,7 +74,9 @@ public final class SendableString: @unchecked Sendable {
     /// - Parameter newValue: The new value to set.
     public func set(_ newValue: String) {
         queue.async(flags: .barrier) {
-            self._value = newValue
+            Task { @MainActor in
+                self._value = newValue
+            }
         }
     }
     
@@ -90,7 +92,7 @@ public final class SendableString: @unchecked Sendable {
     /// - Throws: An error if the operation fails (though the current implementation does not throw specific errors).
     public func asyncMutate(_ mutate: @Sendable @escaping (String) -> String) async {
         await withCheckedContinuation { continuation in
-            Task.detached(priority: .medium) {
+            Task.detached(priority: .medium) { @MainActor in
                 while true {
                     let currentValue = self.queue.sync { self._value }
                     let newValue = mutate(currentValue)
