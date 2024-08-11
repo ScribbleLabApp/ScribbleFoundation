@@ -1,5 +1,5 @@
 //
-//  ScribbleFoundationUI.swift
+//  SCRTextFieldModifier.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -29,4 +29,18 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import Foundation
+import SwiftUI
+
+struct SCRTextFieldModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.subheadline)
+            .padding(12)
+            .cornerRadius(10)
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                .strokeBorder(Color(red: 194/255, green: 194/255, blue: 194/255), lineWidth: 0.5)
+            }
+            .frame(width: 359)
+    }
+}

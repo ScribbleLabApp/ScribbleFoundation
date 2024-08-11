@@ -1,5 +1,5 @@
 //
-//  ScribbleFoundationUI.swift
+//  SCRButtonModifier.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -29,4 +29,16 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import Foundation
+import SwiftUI
+
+struct SCRButtonModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .frame(width: 360, height: 44)
+            .background(Color.orange)
+            .cornerRadius(10)
+    }
+}

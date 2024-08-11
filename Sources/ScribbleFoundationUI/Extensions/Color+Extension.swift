@@ -1,5 +1,5 @@
 //
-//  ScribbleFoundationUI.swift
+//  Color+Extension.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -29,4 +29,40 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import Foundation
+import SwiftUI
+
+public extension Color {
+    
+    /// Initializes a `Color` instance with a hexadecimal string representing the color.
+    ///
+    /// - Parameter hex: The hexadecimal string representing the color, with or without the '#' prefix.
+    /// - Returns: A `Color` instance initialized with the specified hexadecimal value.
+    /// - Note: The hex string can be in the format `"#RRGGBB"` or `"RRGGBB"`.
+    init(hex: String) {
+        var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexString = hexString.replacingOccurrences(of: "#", with: "")
+
+        var rgb: UInt64 = 0
+        Scanner(string: hexString).scanHexInt64(&rgb)
+
+        let red = Double((rgb & 0xFF0000) >> 16)
+        let green = Double((rgb & 0x00FF00) >> 8)
+        let blue = Double(rgb & 0x0000FF)
+
+        self.init(red: red / 255.0, green: green / 255.0, blue: blue / 255.0)
+    }
+    
+    /// Initializes a `Color` instance with a hexadecimal integer representing the color.
+    ///
+    /// - Parameter hex: The hexadecimal value representing the color.
+    /// - Returns: A `Color` instance initialized with the specified hexadecimal value.
+    /// - Note: The hex value should be in the format `0xRRGGBB`.
+    init(hex: Int) {
+        let hexString = String(format: "#%06X", hex)
+        self.init(hex: hexString)
+    }
+}
+
+public extension Color {
+    static let orange = Color(hex: "#ED8335")
+}
