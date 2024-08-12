@@ -38,6 +38,9 @@ import Foundation
 /// across concurrent tasks. It uses a `DispatchQueue` with a concurrent attribute to handle
 /// synchronization, ensuring thread-safe operations on the string value. This class also supports
 /// asynchronous mutations with the `asyncMutate` method.
+///
+/// > Warning:
+/// > `SendableString` is only guaranteed to be thread-safe on the main thread.
 @available(iOS 18.0, macOS 15.0, *)
 public final class SendableString: Sendable {
     
