@@ -38,8 +38,9 @@ import Foundation
 // for all types that need to conform to it.
 
 %{
-    types: ["Int", "Double", "String", "Date", "Bool"]
-}
+    # Define the types to generate code for
+    types = ["Int", "Double", "String", "Date", "Bool"]
+}%
 
 %for type in types:
 public extension %{type}: Comparable {
@@ -102,4 +103,4 @@ public extension %{type}: Comparable {
         return compare(with: other) == .orderedAscending
     }
 }
-%endfor
+%end
