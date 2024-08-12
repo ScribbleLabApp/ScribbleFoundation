@@ -1,5 +1,5 @@
 //
-//  Analytics.swift
+//  AnalyticsLogger.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,27 +31,41 @@
 
 import Foundation
 
-/// A protocol for logging and tracking events with extended functionalities.
+/// A concrete implementation of the `Analytics` protocol for logging and tracking events.
 ///
-/// The `Analytics` protocol defines methods for logging events, errors, and user sessions.
-/// It also supports setting user identifiers, batch logging of events, and categorizing events
-/// with different log levels.
+/// `AnalyticsLogger` provides a basic implementation for logging events, errors, and user
+/// sessions. It also supports setting user IDs and batch logging of events.
+///
+/// - Note: This implementation prints log messages to the console for demonstration purposes.
 @available(iOS 18.0, macOS 15.0, *)
-public protocol Analytics {
+public final class AnalyticsLogger: Analytics {
+    
+    private var currentSessionId: String?
+    private var userId: String?
     
     /// Logs an event with optional parameters.
     ///
     /// - Parameters:
     ///   - eventName: The name of the event to be logged.
     ///   - parameters: Optional dictionary of parameters associated with the event.
-    func logEvent(_ eventName: String, parameters: [String: Any]?)
+    public func logEvent(
+        _ eventName: String,
+        parameters: [String: Any]?
+    ) {
+        print("Logging event: \(eventName), parameters: \(String(describing: parameters))")
+    }
     
     /// Logs an error event with optional parameters.
     ///
     /// - Parameters:
     ///   - error: The error to be logged.
     ///   - parameters: Optional dictionary of parameters associated with the error.
-    func logError(_ error: Error, parameters: [String: Any]?)
+    public func logError(
+        _ error: Error,
+        parameters: [String: Any]?
+    ) {
+        print("Logging error: \(error.localizedDescription), parameters: \(String(describing: parameters))")
+    }
     
     /// Logs a custom event with a specified log level.
     ///
@@ -59,26 +73,66 @@ public protocol Analytics {
     ///   - eventName: The name of the event to be logged.
     ///   - level: The log level for the event.
     ///   - parameters: Optional dictionary of parameters associated with the event.
-    func logEvent(_ eventName: String, level: _LogLevel, parameters: [String: Any]?)
+    public func logEvent(
+        _ eventName: String,
+        level: _LogLevel,
+        parameters: [String: Any]?
+    ) {
+        print("Logging event: \(eventName), level: \(level.rawValue), parameters: \(String(describing: parameters))")
+    }
     
     /// Tracks the start of a user session.
     ///
     /// - Parameter sessionId: The unique identifier for the user session.
-    func startSession(_ sessionId: String)
+    public func startSession(_ sessionId: String) {
+        currentSessionId = sessionId
+        print("Started session: \(sessionId)")
+    }
     
     /// Tracks the end of a user session.
     ///
     /// - Parameter sessionId: The unique identifier for the user session.
-    func endSession(_ sessionId: String)
+    public func endSession(_ sessionId: String) {
+        guard currentSessionId == sessionId else { return }
+        currentSessionId = nil
+        print("Ended session: \(sessionId)")
+    }
     
     /// Sets or updates the user ID for tracking purposes.
     ///
     /// - Parameter userId: The unique identifier for the user.
-    func setUserId(_ userId: String)
+    public func setUserId(_ userId: String) {
+        self.userId = userId
+        print("Set user ID: \(userId)")
+    }
     
     /// Logs multiple events in a batch.
     ///
     /// - Parameters:
     ///   - events: An array of events to be logged, where each event includes the event name and optional parameters.
-    func logEvents(_ events: [(eventName: String, parameters: [String: Any]?)])
+    public func logEvents(
+        _ events: [
+            (eventName: String,
+             parameters: [String: Any]?)
+    ]) {
+        for event in events {
+            logEvent(event.eventName, parameters: event.parameters)
+        }
+    }
+}
+
+/// Enumeration for custom log levels.
+///
+/// - debug: Logs detailed information for debugging purposes.
+/// - info: Logs general informational messages.
+/// - warning: Logs warnings that may indicate potential issues.
+/// - error: Logs errors that indicate a failure or issue.
+/// - critical: Logs critical errors that require immediate attention.
+@available(iOS 18.0, macOS 15.0, *)
+public enum _LogLevel: String {
+    case debug
+    case info
+    case warning
+    case error
+    case critical
 }
