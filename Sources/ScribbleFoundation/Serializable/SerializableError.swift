@@ -1,5 +1,5 @@
 //
-//  Serializable.swift
+//  SerializableError.swift
 //  ScribbleFoundation
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -31,38 +31,27 @@
 
 import Foundation
 
-/// A protocol for objects that can be serialized and deserialized.
+/// An enumeration that defines errors related to serialization processes.
 ///
-/// Conforming types must support encoding to and decoding from a JSON format.
-/// This protocol extends `Codable` to provide additional methods for converting to and from JSON strings.
+/// This enumeration is used to categorize different types of errors that can occur during the encoding and decoding
+/// processes in types that conform to the `Serializable` protocol. It helps provide clear and specific error handling
+/// by distinguishing between different failure scenarios.
 ///
+/// - `encodingFailed`: Indicates that encoding to a JSON format has failed. This could be due to issues with the data or
+///   the encoding process itself.
+/// - `decodingFailed`: Indicates that decoding from a JSON format has failed. This could be due to issues with the JSON data
+///   or the decoding process itself.
+/// - `unknown`: Represents an unknown error that does not fall into the other categories. This can be used as a catch-all for
+///   unexpected errors.
 @available(iOS 18.0, macOS 15.0, *)
-public protocol Serializable: Codable {
-    associatedtype T
+public enum SerializableError: Error {
     
-    /// Converts the object to a JSON string.
-    ///
-    /// - Returns: A JSON string representation of the object.
-    /// - Throws: An error if encoding to JSON fails.
-    func toJSON() throws -> String
+    /// Error indicating that encoding to a JSON format has failed.
+    case encodingFailed
     
-    /// Initializes the object from a JSON string.
-    ///
-    /// - Parameter json: A JSON string representation of the object.
-    /// - Returns: An instance of the conforming type initialized with the JSON data.
-    /// - Throws: An error if decoding from JSON fails.
-    static func fromJSON(_ json: String) throws -> T
-
-    /// Encodes the object to a JSON `Data` object.
-    ///
-    /// - Returns: JSON `Data` representation of the object.
-    /// - Throws: An error if encoding to JSON fails.
-    func encode() throws -> Data
+    /// Error indicating that decoding from a JSON format has failed.
+    case decodingFailed
     
-    /// Decodes an object from a JSON `Data` object.
-    ///
-    /// - Parameter data: JSON `Data` representation of the object.
-    /// - Returns: An instance of the conforming type initialized with the JSON data.
-    /// - Throws: An error if decoding from JSON fails.
-    static func decode(from data: Data) throws -> T
+    /// Error representing an unknown failure that does not fit other categories.
+    case unknown
 }

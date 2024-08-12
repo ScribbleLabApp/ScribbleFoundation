@@ -76,6 +76,8 @@ The ScribbleFoundation library offers a suite of protocols and utilities to help
 ### Data Handling
 
 - <doc:Serializable>
+- <doc:Serialization>
+- <doc:SerializableError>
 - <doc:UserDefaultsManager>
 
 ### Observation & Notifications
