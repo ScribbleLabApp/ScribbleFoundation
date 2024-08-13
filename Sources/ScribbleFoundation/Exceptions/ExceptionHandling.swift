@@ -49,7 +49,8 @@ public protocol ExceptionHandling {
     ///
     /// This method is called to handle exceptions that were not caught by the application's standard exception handling mechanisms.
     ///
-    /// - Parameter exception: The uncaught exception to handle. This is an instance of `NSException` that contains details about the error.
+    /// - Parameter exception: The uncaught exception to handle. This is an instance of `NSException` that
+    ///                        contains details about the error.
     func handleException(_ exception: NSException)
     
     /// Handles a signal-based crash.
@@ -66,7 +67,8 @@ public protocol ExceptionHandling {
     /// - Parameters:
     ///   - exception: The error or exception that occurred. This is an instance of `Error` that provides information about the failure.
     ///   - description: A brief description of the context in which the exception occurred. This helps provide additional information about the error.
-    ///   - additionalContext: Optional additional context or metadata about the exception. This can include relevant information that may aid in debugging.
+    ///   - additionalContext: Optional additional context or metadata about the exception. This can include relevant information that
+    ///                        may aid in debugging.
     func recordException(_ exception: Error, description: String, additionalContext: [String: Any]?)
     
     /// Generates a crash report containing details of the recorded exceptions.

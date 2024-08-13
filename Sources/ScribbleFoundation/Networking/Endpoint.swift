@@ -44,7 +44,8 @@ public protocol Endpoint {
     
     /// A `URLRequest` instance representing the network request for this endpoint.
     ///
-    /// The `urlRequest` property constructs the necessary request, including URL, HTTP method, and any additional parameters required for the request.
+    /// The `urlRequest` property constructs the necessary request, including URL,
+    /// HTTP method, and any additional parameters required for the request.
     ///
     /// - Returns: A `URLRequest` object configured with the endpoint's details.
     var urlRequest: URLRequest { get }
@@ -57,7 +58,9 @@ public protocol Endpoint {
 ///
 /// Example Usage:
 /// ```swift
-/// let endpoint = APIEndpoint(path: "https://api.example.com/resource", method: .get, parameters: ["key": "value"])
+/// let endpoint = APIEndpoint(path: "https://api.example.com/resource",
+///                            method: .get,
+///                            parameters: ["key": "value"])
 /// let request = endpoint.urlRequest
 /// ```
 @available(iOS 18.0, macOS 15.0, *)
@@ -72,18 +75,22 @@ public struct APIEndpoint: Endpoint {
     
     /// Optional parameters to be included in the request.
     ///
-    /// These parameters are added to the URL query string if the HTTP method is "GET", or to the request body if the method is "POST" or "PUT".
+    /// These parameters are added to the URL query string if the HTTP method is "GET",
+    /// or to the request body if the method is "POST" or "PUT".
     public let parameters: [String: Any]?
     
     /// Constructs a `URLRequest` instance based on the endpoint's properties.
     ///
-    /// This property builds a `URLRequest` object by combining the `path`, `method`, and `parameters`. It sets up the request URL, HTTP method, and query items or body as needed.
+    /// This property builds a `URLRequest` object by combining the `path`, `method`, and `parameters`.
+    /// It sets up the request URL, HTTP method, and query items or body as needed.
     ///
     /// - Returns: A `URLRequest` configured with the endpoint's path, method, and parameters.
     public var urlRequest: URLRequest {
         var components = URLComponents(string: path)!
         if let parameters = parameters {
-            components.queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+            components.queryItems = parameters.map {
+                URLQueryItem(name: $0.key, value: "\($0.value)")
+            }
         }
         
         var request = URLRequest(url: components.url!)

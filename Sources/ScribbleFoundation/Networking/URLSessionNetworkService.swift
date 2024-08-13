@@ -50,7 +50,8 @@ import Foundation
 /// let networkService = SCRURLSessionNetworkService()
 ///
 /// // Define an endpoint
-/// let endpoint = APIEndpoint(path: "https://api.example.com/data", method: .get, parameters: nil)
+/// let endpoint = APIEndpoint(path: "https://api.example.com/data",
+///                            method: .get, parameters: nil)
 ///
 /// // Fetch data from the endpoint
 /// Task {
@@ -78,7 +79,8 @@ public final class SCRURLSessionNetworkService: Networking {
     
     /// Fetches and decodes data from the specified endpoint into a Swift type.
     ///
-    /// This method performs a network request to the provided endpoint, waits for the response, and then decodes the response data into the specified type.
+    /// This method performs a network request to the provided endpoint, waits for the response,
+    /// and then decodes the response data into the specified type.
     ///
     /// - Parameter endpoint: The `Endpoint` object representing the network request details.
     /// - Returns: A `T` instance, which is the decoded data of type `T`.
@@ -91,7 +93,8 @@ public final class SCRURLSessionNetworkService: Networking {
     
     /// Performs a network request to the specified endpoint and returns the raw data.
     ///
-    /// This method performs a network request to the provided endpoint and checks if the response status code indicates success (200-299). It returns the raw data from the response.
+    /// This method performs a network request to the provided endpoint and checks if the response
+    /// status code indicates success (200-299). It returns the raw data from the response.
     ///
     /// - Parameter endpoint: The `Endpoint` object representing the network request details.
     /// - Returns: The raw data received from the network request.

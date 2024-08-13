@@ -33,6 +33,9 @@ import Foundation
 import ObjectiveC
 
 #if os(macOS)
+
+// swiftlint:disable all
+
 @available(macOS 15.0, *)
 public extension Process {
     
@@ -234,4 +237,6 @@ private extension Data {
         }
     }
 }
+
+// swiftlint:enable all
 #endif

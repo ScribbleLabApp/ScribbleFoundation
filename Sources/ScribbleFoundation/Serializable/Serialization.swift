@@ -73,7 +73,9 @@ public class Serialization<T: Codable>: Serializable {
     /// - Parameter instance: The object to be serialized or deserialized. This object must conform to `Codable`.
     /// - Note: The instance is cast to type `T`, which must also conform to `Codable`.
     public init(instance: Codable) {
+        // swiftlint:disable force_cast
         self.instance = instance as! T
+        // swiftlint:enable force_cast
     }
     
     /// Converts the object to a JSON string.
@@ -98,7 +100,9 @@ public class Serialization<T: Codable>: Serializable {
     /// - Returns: An instance of the object initialized with the JSON data.
     /// - Throws: `SerializableError.decodingFailed` if decoding from JSON fails.
     public static func fromJSON(_ json: String) throws -> T {
-        let data = json.data(using: .utf8) ?? Data()
+        guard let data = json.data(using: .utf8) else {
+            throw SerializableError.decodingFailed
+        }
         return try decode(from: data)
     }
     

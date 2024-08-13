@@ -64,7 +64,7 @@ public extension Color {
 }
 
 public extension Color {
-    static let s_blue = Color(hex: "#42A5F5")
-    static let s_yellow = Color(hex: "#FFBF45")
-    static let s_orange = Color(hex: "#ED8335")
+    static let sBlue = Color(hex: "#42A5F5")
+    static let sYellow = Color(hex: "#FFBF45")
+    static let sOrange = Color(hex: "#ED8335")
 }

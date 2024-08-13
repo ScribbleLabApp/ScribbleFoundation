@@ -57,9 +57,17 @@ public final class Validation: Validatable {
     /// ```
     /// This pattern matches common email address formats and is case insensitive.
     public static func isValidEmail(_ email: String) -> Bool {
-        let regex = try! NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Z]{2,}", options: .caseInsensitive)
-        let matches = regex.matches(in: email, options: [], range: NSRange(location: 0, length: email.count))
-        return matches.count > 0
+        let regex = try! NSRegularExpression(pattern: "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Z]{2,}",
+                                             options: .caseInsensitive)
+        let matches = regex.matches(
+            in: email,
+            options: [],
+            range: NSRange(
+                location: 0,
+                length: email.count
+            )
+        )
+        return !matches.isEmpty // matches.count > 0
     }
     
     /// Validates if the given string is a strong password.
@@ -77,8 +85,16 @@ public final class Validation: Validatable {
     /// This pattern ensures that the password includes at least one lowercase letter, one uppercase letter,
     /// and one digit, and is at least 8 characters long.
     public static func isStrongPassword(_ password: String) -> Bool {
-        let regex = try! NSRegularExpression(pattern: "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}", options: [])
-        let matches = regex.matches(in: password, options: [], range: NSRange(location: 0, length: password.count))
-        return matches.count > 0
+        let regex = try! NSRegularExpression(pattern: "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}",
+                                             options: [])
+        let matches = regex.matches(
+            in: password,
+            options: [],
+            range: NSRange(
+                location: 0,
+                length: password.count
+            )
+        )
+        return !matches.isEmpty // matches.count > 0
     }
 }
