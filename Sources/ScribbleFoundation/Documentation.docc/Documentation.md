@@ -29,6 +29,14 @@ The ScribbleFoundation library offers a suite of protocols and utilities to help
 
 ### Essentials
 
+### Availability
+
+- <doc:Availability>
+- <doc:FeatureAvailabilityChecker>
+- <doc:featureAvailability>
+- <doc:FeatureAvailability>
+- <doc:AvailabilityConditionBuilder>
+
 ### Analytics & Logging
 
 - <doc:Analytics>
