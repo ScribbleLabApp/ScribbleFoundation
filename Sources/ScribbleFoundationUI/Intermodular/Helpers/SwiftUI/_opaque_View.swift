@@ -32,6 +32,8 @@
 import Combine
 import SwiftUI
 
+// swiftlint:disable identifier_name
+
 /// A protocol that defines methods and properties for working with views in a type-erased manner.
 ///
 /// This protocol allows you to work with views in a more abstract way, providing
@@ -118,3 +120,5 @@ extension ModifiedContent: _opaque_View where Content: View, Modifier: ViewModif
         return AnyView(self)
     }
 }
+
+// swiftlint:enable identifier_name

@@ -39,7 +39,8 @@ import SwiftUI
 ///
 /// - Parameters:
 ///   - type: A `Bool.Type` that indicates the type of the state managed internally. This parameter is used for type inference purposes.
-///   - content: A closure that takes a `Binding<Bool>` and returns a view. The `Binding<Bool>` represents the internal boolean state and allows two-way binding to it.
+///   - content: A closure that takes a `Binding<Bool>` and returns a view. The `Binding<Bool>` represents the internal
+///              boolean state and allows two-way binding to it.
 ///
 /// - Returns: A SwiftUI view that uses the provided `content` closure to construct the UI, with a `Binding<Bool>` to the internal state.
 ///
@@ -855,7 +856,9 @@ private struct WithInlineOptionalStateObject<Object: ObservableObject, Content: 
         if let object = object {
             self._object = StateObject(wrappedValue: object)
         } else {
+            // swiftlint:disable force_cast
             self._object = StateObject(wrappedValue: DefaultObservableObject() as! Object)
+            // swiftlint:enable force_cast
         }
         self.content = content
     }

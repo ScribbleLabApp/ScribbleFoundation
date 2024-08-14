@@ -32,6 +32,8 @@
 import Swift
 import SwiftUI
 
+// swiftlint:disable identifier_name
+
 // MARK: - View.then
 
 extension View {
@@ -301,7 +303,9 @@ extension View {
             self.id(id)
         }
         
+        // swiftlint:disable force_cast
         return _openExistential(hashable.base as! (any Hashable), do: _makeView)
+        // swiftlint:enable force_cast
     }
 }
 
@@ -556,3 +560,5 @@ extension View {
 }
 #endif
 #endif
+
+// swiftlint:enable identifier_name

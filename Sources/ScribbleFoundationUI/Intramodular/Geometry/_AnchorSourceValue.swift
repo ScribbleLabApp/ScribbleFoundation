@@ -23,14 +23,14 @@ public enum _AnchorSourceValue: Equatable {
         }
         
         switch value {
-            case let value as CGPoint:
-                self = .point(value)
-            case let value as UnitPoint:
-                self = .unitPoint(value)
-            case let value as CGRect:
-                self = .rect(value)
-            default:
-                throw InitializationError.failedToExtract
+        case let value as CGPoint:
+            self = .point(value)
+        case let value as UnitPoint:
+            self = .unitPoint(value)
+        case let value as CGRect:
+            self = .rect(value)
+        default:
+            throw InitializationError.failedToExtract
         }
     }
 }
