@@ -29,6 +29,7 @@ let package = Package(
         ),
         .target(
             name: "ScribbleFoundationUI",
+            dependencies: ["ScribbleFoundation"],
             path: "Sources/ScribbleFoundationUI"
         ),
         .testTarget(
