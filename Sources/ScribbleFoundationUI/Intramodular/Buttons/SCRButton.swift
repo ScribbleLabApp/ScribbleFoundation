@@ -1,6 +1,6 @@
 //
 //  SCRButton.swift
-//  ScribbleFoundation
+//  ScribbleFoundationUI
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
 //
@@ -32,7 +32,8 @@
 import SwiftUI
 
 /// A customizable button view with support for text, optional images, and various styling properties.
-struct SCRButton: View {
+@available(iOS 18.0, macOS 15.0, *)
+@frozen public struct SCRButton: View {
     var text:               String
     var font:               Font?
     var fontWeight:         Font.Weight?
@@ -89,7 +90,7 @@ struct SCRButton: View {
         self.imageHeight                 = 35
     }
 
-    var body: some View {
+    public var body: some View {
         Button {
             action()
         } label: {
@@ -125,76 +126,5 @@ struct SCRButton: View {
                     )
             }
         }
-    }
-}
-
-extension View {
-    
-    /// Creates a styled button with customizable appearance and action.
-    ///
-    /// - Parameters:
-    ///   - text: The text to display on the button.
-    ///   - font: The font to apply to the button text.
-    ///   - fontWeight: The weight of the button text font.
-    ///   - textColor: The color of the button's text.
-    ///   - backgroundColor: The background color of the button.
-    ///   - cornerRadius: The corner radius of the button's shape.
-    ///   - action: The action to perform when the button is tapped.
-    /// - Returns: A view representing the styled button.
-    func SCRButton(
-        text: String,
-        font: Font?,
-        fontWeight: Font.Weight?,
-        textColor: Color,
-        backgroundColor: Color,
-        cornerRadius: CGFloat,
-        action: @escaping () -> Void
-    ) -> some View {
-        return SCRButton(
-            text: text,
-            font: font,
-            fontWeight: fontWeight,
-            textColor: textColor,
-            backgroundColor: backgroundColor,
-            cornerRadius: cornerRadius,
-            action: action
-        )
-    }
-    
-    /// Creates a styled button with customizable appearance, including image.
-    ///
-    /// - Parameters:
-    ///   - text: The text to display on the button.
-    ///   - font: The font to apply to the button text.
-    ///   - fontWeight: The weight of the button text font.
-    ///   - textColor: The color of the button's text.
-    ///   - backgroundColor: The background color of the button.
-    ///   - cornerRadius: The corner radius of the button's shape.
-    ///   - image: An optional `Image` to display on the button.
-    ///   - systemImage: An optional system image name to display on the button.
-    ///   - action: The action to perform when the button is tapped.
-    /// - Returns: A view representing the styled button with an image.
-    func SCRButton(
-        text: String,
-        font: Font?,
-        fontWeight: Font.Weight?,
-        textColor: Color,
-        backgroundColor: Color,
-        cornerRadius: CGFloat,
-        image: Image?,
-        systemImage: String?,
-        action: @escaping () -> Void
-    ) -> some View {
-        return SCRButton(
-            text: text,
-            font: font,
-            fontWeight: fontWeight,
-            textColor: textColor,
-            backgroundColor: backgroundColor,
-            cornerRadius: cornerRadius,
-            image: image,
-            systemImage: systemImage,
-            action: action
-        )
     }
 }

@@ -40,9 +40,13 @@ public extension SendableString {
     /// This method modifies the current string by appending the provided string to it.
     ///
     /// - Parameter string: The string to append to the current string.
-    func append(_ string: String) async {
-        await asyncMutate { current in
-            current + string
+    func append(_ string: String) async throws {
+        do {
+            try await asyncMutate { current in
+                current + string
+            }
+        } catch {
+            throw SendableError.append
         }
     }
     
@@ -51,9 +55,13 @@ public extension SendableString {
     /// This method modifies the current string by prepending the provided string to it.
     ///
     /// - Parameter string: The string to prepend to the current string.
-    func prepend(_ string: String) async {
-        await asyncMutate { current in
-            string + current
+    func prepend(_ string: String) async throws {
+        do {
+            try await asyncMutate { current in
+                string + current
+            }
+        } catch {
+            throw SendableError.prepend
         }
     }
     
@@ -64,18 +72,33 @@ public extension SendableString {
     /// - Parameters:
     ///   - target: The substring to replace.
     ///   - replacement: The string to replace the target with.
-    func replace(_ target: String, with replacement: String) async {
-        await asyncMutate { current in
-            current.replacingOccurrences(of: target, with: replacement)
+    func replace(_ target: String, with replacement: String) async throws {
+        do {
+            try await asyncMutate { current in
+                current.replacingOccurrences(of: target, with: replacement)
+            }
+        } catch {
+            throw SendableError.replace
         }
     }
     
     /// Trims whitespace and newline characters from the current string asynchronously.
     ///
     /// This method modifies the current string by removing leading and trailing whitespace and newline characters.
-    func trim() async {
-        await asyncMutate { current in
-            current.trimmingCharacters(in: .whitespacesAndNewlines)
+    func trim() async throws {
+        do {
+            try await asyncMutate { current in
+                current.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        } catch {
+            throw SendableError.trim
         }
+    }
+    
+    enum SendableError: Error {
+        case append
+        case prepend
+        case replace
+        case trim
     }
 }

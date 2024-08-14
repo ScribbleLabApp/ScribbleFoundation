@@ -1,6 +1,6 @@
 //
-//  Color+Extension.swift
-//  ScribbleFoundation
+//  AnyViewWrapper.swift
+//  ScribbleFoundationUI
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
 //
@@ -31,40 +31,30 @@
 
 import SwiftUI
 
-public extension Color {
+/// A view wrapper that allows for type-erased views to be used where specific view types are not required.
+///
+/// This struct is useful for scenarios where you need to wrap a specific `View` type in an `AnyView` to avoid type constraints,
+/// particularly when dealing with dynamic view content or complex view compositions.
+///
+/// - Note: This struct is often used internally in SwiftUI extensions or custom view modifiers where the exact type of view
+///         is not known or needs to be abstracted.
+///
+/// - SeeAlso: ``SwiftUI.AnyView``, ``SwiftUI.View``
+@available(iOS 18.0, macOS 15.0, *)
+@MainActor
+public struct AnyViewWrapper: View {
     
-    /// Initializes a `Color` instance with a hexadecimal string representing the color.
+    private let content: AnyView
+
+    /// Initializes an `AnyViewWrapper` with a specific view.
     ///
-    /// - Parameter hex: The hexadecimal string representing the color, with or without the '#' prefix.
-    /// - Returns: A `Color` instance initialized with the specified hexadecimal value.
-    /// - Note: The hex string can be in the format `"#RRGGBB"` or `"RRGGBB"`.
-    init(hex: String) {
-        var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        hexString = hexString.replacingOccurrences(of: "#", with: "")
-
-        var rgb: UInt64 = 0
-        Scanner(string: hexString).scanHexInt64(&rgb)
-
-        let red = Double((rgb & 0xFF0000) >> 16)
-        let green = Double((rgb & 0x00FF00) >> 8)
-        let blue = Double(rgb & 0x0000FF)
-
-        self.init(red: red / 255.0, green: green / 255.0, blue: blue / 255.0)
+    /// - Parameter view: The view to wrap in an `AnyView`.
+    public init<V: View>(_ view: V) {
+        self.content = AnyView(view)
     }
-    
-    /// Initializes a `Color` instance with a hexadecimal integer representing the color.
-    ///
-    /// - Parameter hex: The hexadecimal value representing the color.
-    /// - Returns: A `Color` instance initialized with the specified hexadecimal value.
-    /// - Note: The hex value should be in the format `0xRRGGBB`.
-    init(hex: Int) {
-        let hexString = String(format: "#%06X", hex)
-        self.init(hex: hexString)
-    }
-}
 
-public extension Color {
-    static let sBlue = Color(hex: "#42A5F5")
-    static let sYellow = Color(hex: "#FFBF45")
-    static let sOrange = Color(hex: "#ED8335")
+    /// The body of the view that returns the wrapped view content.
+    public var body: some View {
+        content
+    }
 }
