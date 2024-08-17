@@ -5,6 +5,8 @@ import os
 import Network
 import Atomics
 
+#if canImport(UIKit)
 import UIKit
+#endif
 import SwiftUI
 import SwiftUICore

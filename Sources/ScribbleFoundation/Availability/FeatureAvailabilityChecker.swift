@@ -61,12 +61,13 @@ public struct FeatureAvailabilityChecker: Availability {
     }
     
     public func isAvailable(
-        forDeviceType deviceType: UIUserInterfaceIdiom,
-        currentDeviceType: UIUserInterfaceIdiom
+        forDeviceType deviceType: SCRDeviceType,
+        currentDeviceType: SCRDeviceType
     ) -> Bool {
         return currentDeviceType == deviceType
     }
     
+    #if !os(macOS) && canImport(UIKit)
     public func isAvailable(
         forOrientation orientation: UIDeviceOrientation,
         currentOrientation: UIDeviceOrientation
@@ -80,29 +81,35 @@ public struct FeatureAvailabilityChecker: Availability {
     ) -> Bool {
         return currentSizeClass == sizeClass
     }
+    #endif
     
     public func isAvailable(condition: () -> Bool) -> Bool {
         return condition()
     }
     
+    // TODO: Adjust for macOS canImport(UIKit)
     public func availabilityReason() -> String {
         let currentVersion = ProcessInfo.processInfo.operatingSystemVersion
-        let currentDeviceType = UIDevice.current.userInterfaceIdiom
+        let currentDeviceType = getCurrentDeviceType()
         let currentOrientation = UIDevice.current.orientation
         let currentSizeClass = UIScreen.main.traitCollection.horizontalSizeClass
         
         if !isAvailable(forOS: OperatingSystemVersion(majorVersion: 18, minorVersion: 0, patchVersion: 0), currentVersion: currentVersion) {
             return "Feature requires iOS 18.0 or later."
         }
-        if !isAvailable(forDeviceType: .pad, currentDeviceType: currentDeviceType) {
+        if !isAvailable(forDeviceType: .iPad, currentDeviceType: currentDeviceType) {
             return "Feature requires an iPad."
         }
+        
+        #if !os(macOS) && canImport(UIKit)
         if !isAvailable(forOrientation: .portrait, currentOrientation: currentOrientation) {
             return "Feature requires portrait orientation."
         }
         if !isAvailable(forSizeClass: .regular, currentSizeClass: currentSizeClass) {
             return "Feature requires regular size class."
         }
+        #endif
+        
         return "Feature is not available due to custom conditions."
     }
 }

@@ -33,6 +33,7 @@ import SwiftUI
 import Foundation
 
 /// A typealias for `FeatureAvailability` to simplify usage.
+@available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
 public typealias featureAvailability<T: Availability> = FeatureAvailability<T>
 
 /// A property wrapper that checks if a feature is available based on various conditions.
@@ -75,6 +76,7 @@ public typealias featureAvailability<T: Availability> = FeatureAvailability<T>
 /// In this example, `FeatureAvailability` checks if `MyFeatureChecker` is available based on
 /// device type, operating system version, and orientation conditions. The `availabilityReason` method
 /// provides a detailed reason if the feature is not available.
+@available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
 @propertyWrapper
 public struct FeatureAvailability<T: Availability> {
     
@@ -87,7 +89,10 @@ public struct FeatureAvailability<T: Availability> {
     ///   - feature: The `Availability` conforming object used to check the feature's availability.
     ///   - conditions: A closure that returns a boolean indicating whether the feature is available
     ///     based on custom conditions provided through the `AvailabilityConditionBuilder`.
-    public init(feature: T, @AvailabilityConditionBuilder conditions: @escaping () -> Bool) {
+    public init(
+        feature: T,
+        @AvailabilityConditionBuilder conditions: @escaping () -> Bool
+    ) {
         self.feature = feature
         self.conditions = conditions
     }
@@ -117,6 +122,7 @@ public struct FeatureAvailability<T: Availability> {
     }
 }
 
+@available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
 @resultBuilder
 public struct AvailabilityConditionBuilder {
     

@@ -29,7 +29,9 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#if canImport(UIKit)
 import UIKit
+#endif
 import SwiftUI
 import Foundation
 
@@ -73,9 +75,10 @@ public protocol Availability {
     ///   - deviceType: The required device type. This specifies the type of device needed for the feature.
     ///   - currentDeviceType: The current device type. This represents the device on which the check is performed.
     /// - Returns: A boolean indicating whether the feature is available on the specified device type.
-    /// - Note: Use `UIUserInterfaceIdiom` values to represent device types (e.g., `.phone`, `.pad`, `.mac`).
-    func isAvailable(forDeviceType deviceType: UIUserInterfaceIdiom, currentDeviceType: UIUserInterfaceIdiom) -> Bool
+    /// - Note: Use `SCRDeviceType` values to represent device types (e.g., `.iPhone`, `.iPad`, `.mac`).
+    func isAvailable(forDeviceType deviceType: SCRDeviceType, currentDeviceType: SCRDeviceType) -> Bool
     
+    #if !os(macOS)
     /// Checks if the feature is available based on the current device orientation.
     ///
     /// This method checks if the feature is available in a specific device orientation. It is useful for features
@@ -99,6 +102,7 @@ public protocol Availability {
     /// - Returns: A boolean indicating whether the feature is available in the specified size class.
     /// - Note: Size class values can be retrieved from `UITraitCollection` (e.g., `.regular`, `.compact`).
     func isAvailable(forSizeClass sizeClass: UIUserInterfaceSizeClass, currentSizeClass: UIUserInterfaceSizeClass) -> Bool
+    #endif
     
     /// Checks if the feature is available based on a custom condition.
     ///
