@@ -1,0 +1,62 @@
+name: Update Contributors List 🚀
+
+on:
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: "Manually trigger the workflow"
+        required: true
+        default: "true"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/contributors.yml"
+      - "utils/generate_contributors_list.sh"
+      - "CONTRIBUTORS.md"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  update_contributors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run generate_contributors_list.sh
+        run: |
+          chmod +x ./utils/generate_contributors_list.sh
+          ./utils/generate_contributors_list.sh
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --exit-code || echo "Changes detected" > changes.txt
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add CONTRIBUTORS.md
+          git commit -m "Update CONTRIBUTORS.md"
+          git push origin HEAD:automated-update-contributors
+
+      - name: Install GitHub CLI
+        run: |
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /usr/share/keyrings/githubcli-archive-keyring.gpg > /dev/null
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          gh auth login --with-token < ${{ secrets.GITHUB_TOKEN }}
+          gh pr create --title "Automated update of CONTRIBUTORS.md" \
+                       --body "This pull request updates the CONTRIBUTORS.md file with the latest contributor information." \
+                       --base main \
+                       --head automated-update-contributors \
+                       --repo ${{ github.repository }}
