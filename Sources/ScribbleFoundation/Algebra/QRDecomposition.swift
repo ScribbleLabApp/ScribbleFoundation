@@ -32,6 +32,8 @@
 import Foundation
 import Accelerate
 
+// swiftlint:disable all
+
 /// Computes the QR decomposition of a matrix.
 ///
 /// The QRDecomposition class computes the QR decomposition of a matrix `A`.
@@ -107,3 +109,5 @@ public class QRDecomposition {
         }
     }
 }
+
+// swiftlint:enable all

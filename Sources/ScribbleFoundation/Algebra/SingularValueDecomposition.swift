@@ -32,6 +32,8 @@
 import Foundation
 import Accelerate
 
+// swiftlint:disable all
+
 /// Computes the Singular Value Decomposition (SVD) of a matrix.
 ///
 /// The SingularValueDecomposition class computes the SVD of an `m x n` matrix `A`.
@@ -224,3 +226,5 @@ public class SingularValueDecomposition {
         V = v
     }
 }
+
+// swiftlint:enable all

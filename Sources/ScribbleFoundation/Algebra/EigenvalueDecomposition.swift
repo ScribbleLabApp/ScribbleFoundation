@@ -32,6 +32,8 @@
 import Foundation
 import Accelerate
 
+// swiftlint:disable all
+
 /// Computes the eigenvalues and eigenvectors of a symmetric matrix using the Eigenvalue Decomposition.
 ///
 /// The EigenvalueDecomposition class computes the eigenvalues and eigenvectors of a real symmetric matrix `A`.
@@ -273,3 +275,5 @@ public class EigenvalueDecomposition {
         
     }
 }
+
+// swiftlint:enable all

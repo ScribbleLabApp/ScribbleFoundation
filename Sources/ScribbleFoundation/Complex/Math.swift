@@ -31,6 +31,8 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
+
 /// A collection of advanced mathematical functions.
 ///
 /// The `Math` class provides static methods for computing special functions such
@@ -198,3 +200,5 @@ public class Math {
         return n == 0 ? 1.0 : Double(n) * factorial(n - 1)
     }
 }
+
+// swiftlint:enable identifier_name

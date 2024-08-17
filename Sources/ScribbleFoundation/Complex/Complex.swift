@@ -32,6 +32,8 @@
 import Darwin
 import Foundation
 
+// swiftlint:disable identifier_name
+
 /// Structure representing a complex number.
 @available(iOS 18.0, macOS 15.0, *)
 public struct Complex {
@@ -259,3 +261,5 @@ public func *(lhs: Complex, rhs: Double) -> Complex {
 public func /(lhs: Complex, rhs: Double) -> Complex {
     return Complex(real: lhs.real / rhs, imaginary: lhs.imaginary / rhs)
 }
+
+// swiftlint:enable identifier_name

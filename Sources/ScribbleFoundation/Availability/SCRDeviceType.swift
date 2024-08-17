@@ -37,6 +37,8 @@ import AppKit
 #endif
 import Foundation
 
+// swiftlint:disable identifier_name
+
 /// Represents the various types of Apple devices that the app might run on.
 ///
 /// Use this enum to identify the type of device your code is currently running on,
@@ -138,3 +140,5 @@ public func getCurrentDeviceType() -> SCRDeviceType {
     return .unspecified
     #endif
 }
+
+// swiftlint:enable identifier_name

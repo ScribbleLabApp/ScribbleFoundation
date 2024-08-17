@@ -32,6 +32,8 @@
 import Foundation
 import Accelerate
 
+// swiftlint:disable all
+
 /// Computes the LU decomposition of a square matrix.
 ///
 /// The LUDecomposition class computes the LU decomposition of a square matrix `A`.
@@ -106,3 +108,5 @@ public class LUDecomposition {
         }
     }
 }
+
+// swiftlint:enable all

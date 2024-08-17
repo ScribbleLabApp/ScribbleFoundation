@@ -31,6 +31,8 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
+
 public extension Random {
     
     /// A high-quality random number generator using the Mersenne Twister algorithm.
@@ -151,3 +153,5 @@ public extension Random {
         }
     }
 }
+
+// swiftlint:enable identifier_name

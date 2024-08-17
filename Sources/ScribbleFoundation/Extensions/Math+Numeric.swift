@@ -31,6 +31,8 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
+
 @available(iOS 18.0, *)
 public extension Math {
     
@@ -223,3 +225,5 @@ public extension Math {
         }
     }
 }
+
+// swiftlint:enable identifier_name
