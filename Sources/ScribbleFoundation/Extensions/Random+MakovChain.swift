@@ -42,9 +42,9 @@ public extension Random {
     /// @Beta
     /// - Note: This class is currently in beta and may change in future releases.
     ///
-    /// # Topics
-    /// - `nextState()`
-    /// - `init(transitionMatrix:initialState:states:)`
+    /// ## Topics
+    /// - ``MarkovChain/nextState()``
+    /// - ``MarkovChain/init(transitionMatrix:initialState:states:)``
     ///
     @available(iOS 18.0, macOS 15.0, *)
     class MarkovChain {

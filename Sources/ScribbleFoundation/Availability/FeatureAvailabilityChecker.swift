@@ -29,7 +29,9 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#if canImport(UIKit)
 import UIKit
+#endif
 import SwiftUI
 import Foundation
 
@@ -48,22 +50,34 @@ public struct FeatureAvailabilityChecker: Availability {
         return conditions()
     }
     
-    public func isAvailable(forOS version: OperatingSystemVersion, currentVersion: OperatingSystemVersion) -> Bool {
+    public func isAvailable(
+        forOS version: OperatingSystemVersion,
+        currentVersion: OperatingSystemVersion
+    ) -> Bool {
         return currentVersion.majorVersion > version.majorVersion ||
                (currentVersion.majorVersion == version.majorVersion && currentVersion.minorVersion >= version.minorVersion) ||
                (currentVersion.majorVersion == version.majorVersion && currentVersion.minorVersion == version.minorVersion &&
                 currentVersion.patchVersion >= version.patchVersion)
     }
     
-    public func isAvailable(forDeviceType deviceType: UIUserInterfaceIdiom, currentDeviceType: UIUserInterfaceIdiom) -> Bool {
+    public func isAvailable(
+        forDeviceType deviceType: UIUserInterfaceIdiom,
+        currentDeviceType: UIUserInterfaceIdiom
+    ) -> Bool {
         return currentDeviceType == deviceType
     }
     
-    public func isAvailable(forOrientation orientation: UIDeviceOrientation, currentOrientation: UIDeviceOrientation) -> Bool {
+    public func isAvailable(
+        forOrientation orientation: UIDeviceOrientation,
+        currentOrientation: UIDeviceOrientation
+    ) -> Bool {
         return currentOrientation == orientation
     }
     
-    public func isAvailable(forSizeClass sizeClass: UIUserInterfaceSizeClass, currentSizeClass: UIUserInterfaceSizeClass) -> Bool {
+    public func isAvailable(
+        forSizeClass sizeClass: UIUserInterfaceSizeClass,
+        currentSizeClass: UIUserInterfaceSizeClass
+    ) -> Bool {
         return currentSizeClass == sizeClass
     }
     
