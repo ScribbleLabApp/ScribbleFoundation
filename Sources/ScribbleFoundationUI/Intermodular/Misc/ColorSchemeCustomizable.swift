@@ -90,3 +90,99 @@ public protocol ColorSchemeCustomizable: Customizable {
     @available(*, deprecated, message: "Use `applyColorScheme(_:)` with `.system` instead.")
     func setSystemMode()
 }
+
+@available(iOS 18.0, macOS 15.0, *)
+public extension ColorSchemeCustomizable {
+    
+    var currentColorScheme: ColorScheme {
+        get { .system }
+        set { applyColorScheme(newValue) }
+    }
+    
+    /// Toggles between light and dark mode.
+    func toggleColorScheme() {
+        switch currentColorScheme {
+        case .light:
+            applyColorScheme(.dark)
+        case .dark:
+            applyColorScheme(.light)
+        case .system:
+            applyColorScheme(.light)
+        @unknown default:
+            applyColorScheme(.system)
+        }
+    }
+    
+    /// Retrieves the current color scheme as a string representation.
+    func getColorSchemeState() -> String {
+        switch currentColorScheme {
+        case .light:
+            return "light"
+        case .dark:
+            return "dark"
+        case .system:
+            return "system"
+        @unknown default:
+            return "unknown"
+        }
+    }
+    
+    /// Applies a color scheme from a string representation.
+    func applyColorScheme(from state: String) {
+        switch state.lowercased() {
+        case "light":
+            applyColorScheme(.light)
+        case "dark":
+            applyColorScheme(.dark)
+        case "system":
+            applyColorScheme(.system)
+        default:
+            applyColorScheme(.system)
+        }
+    }
+    
+    /// Deprecated: Sets the color scheme for the component.
+    func setColorScheme(_ scheme: ColorScheme) {
+        applyColorScheme(scheme)
+    }
+    
+    /// Deprecated: Sets the color scheme to light mode.
+    func setLightMode() {
+        applyColorScheme(.light)
+    }
+    
+    /// Deprecated: Sets the color scheme to dark mode.
+    func setDarkMode() {
+        applyColorScheme(.dark)
+    }
+    
+    /// Deprecated: Sets the color scheme to follow the system's default.
+    func setSystemMode() {
+        applyColorScheme(.system)
+    }
+}
+
+/// An environment key to manage the color scheme customization in the environment.
+@available(iOS 18.0, macOS 15.0, *)
+struct CustomColorSchemeKey: @preconcurrency EnvironmentKey {
+    @MainActor static let defaultValue: ColorScheme = .system
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+extension EnvironmentValues {
+    
+    /// Access the current custom color scheme from the environment.
+    var customColorScheme: ColorScheme {
+        get { self[CustomColorSchemeKey.self] }
+        set { self[CustomColorSchemeKey.self] = newValue }
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+public extension View {
+    
+    /// Set a custom color scheme in the environment.
+    func customColorScheme(_ scheme: ColorScheme) -> some View {
+        environment(\.customColorScheme, scheme)
+    }
+}
