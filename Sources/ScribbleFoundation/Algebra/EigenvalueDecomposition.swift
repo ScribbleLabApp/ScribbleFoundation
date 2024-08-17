@@ -260,7 +260,6 @@ public class EigenvalueDecomposition {
         for i in 1..<n {
             e[i-1] = e[i]
         }
-        
         e[n-1] = 0.0
         
         var f = 0.0
@@ -268,11 +267,92 @@ public class EigenvalueDecomposition {
         let eps = pow(2.0, -52.0)
         
         for l in 0..<n {
+            tst1 = max(tst1, abs(d[l]) + abs(e[l]))
+            var m = l
+            while m < n {
+                if abs(e[m]) <= eps * tst1 {
+                    break
+                }
+                m += 1
+            }
             
-            
+            if m > l {
+                var iter = 0
+                repeat {
+                    iter += 1
+
+                    var g = d[l]
+                    var p = (d[l+1] - g) / (2.0 * e[l])
+                    var r = hypot(p, 1.0)
+                    if p < 0 {
+                        r = -r
+                    }
+                    d[l] = e[l] / (p + r)
+                    d[l+1] = e[l] * (p + r)
+                    let dl1 = d[l+1]
+                    var h = g - d[l]
+                    for i in l+2..<n {
+                        d[i] -= h
+                    }
+                    f += h
+                    
+                    p = d[m]
+                    
+                    var c = 1.0
+                    var c2 = c
+                    var c3 = c
+                    let el1 = e[l+1]
+                    var s = 0.0
+                    var s2 = 0.0
+                    
+                    for i in stride(from: m-1, through: l, by: -1) {
+                        c3 = c2
+                        c2 = c
+                        s2 = s
+                        g = c * e[i]
+                        h = c * p
+                        r = hypot(p, e[i])
+                        e[i+1] = s * r
+                        s = e[i] / r
+                        c = p / r
+                        p = c * d[i] - s * g
+                        d[i+1] = h + s * (c * g + s * d[i])
+                        
+                        for k in 0..<n {
+                            h = z[k][i+1]
+                            z[k][i+1] = s * z[k][i] + c * h
+                            z[k][i] = c * z[k][i] - s * h
+                        }
+                    }
+                    p = -s * s2 * c3 * el1 * e[l] / dl1
+                    e[l] = s * p
+                    d[l] = c * p
+                    
+                } while abs(e[l]) > eps * tst1
+            }
+            d[l] += f
+            e[l] = 0.0
         }
         
-        
+        for i in 0..<n-1 {
+            var k = i
+            var p = d[i]
+            for j in i+1..<n {
+                if d[j] < p {
+                    k = j
+                    p = d[j]
+                }
+            }
+            if k != i {
+                d[k] = d[i]
+                d[i] = p
+                for j in 0..<n {
+                    let tmp = z[j][i]
+                    z[j][i] = z[j][k]
+                    z[j][k] = tmp
+                }
+            }
+        }
     }
 }
 
