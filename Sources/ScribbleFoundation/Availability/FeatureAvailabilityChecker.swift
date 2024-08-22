@@ -94,7 +94,13 @@ public struct FeatureAvailabilityChecker: Availability {
         let currentOrientation = UIDevice.current.orientation
         let currentSizeClass = UIScreen.main.traitCollection.horizontalSizeClass
         
-        if !isAvailable(forOS: OperatingSystemVersion(majorVersion: 18, minorVersion: 0, patchVersion: 0), currentVersion: currentVersion) {
+        if !isAvailable(
+            forOS: OperatingSystemVersion(
+                majorVersion: 18,
+                minorVersion: 0,
+                patchVersion: 0),
+            currentVersion: currentVersion
+        ) {
             return "Feature requires iOS 18.0 or later."
         }
         if !isAvailable(forDeviceType: .iPad, currentDeviceType: currentDeviceType) {

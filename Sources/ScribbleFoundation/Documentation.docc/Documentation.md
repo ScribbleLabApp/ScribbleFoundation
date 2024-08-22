@@ -36,12 +36,21 @@ The ScribbleFoundation library offers a suite of protocols and utilities to help
 - <doc:featureAvailability>
 - <doc:FeatureAvailability>
 - <doc:AvailabilityConditionBuilder>
+- <doc:SCRDeviceType>
+- <doc:getCurrentDeviceType()>
 
 ### Analytics & Logging
 
 - <doc:Analytics>
 - <doc:AnalyticsLogger>
 - <doc:SCRLog>
+
+### Algebra 
+
+- <doc:EigenvalueDecomposition>
+- <doc:LUDecomposition>
+- <doc:QRDecomposition>
+- <doc:SingularValueDecomposition>
 
 ### Core Protocols
 
@@ -52,6 +61,17 @@ The ScribbleFoundation library offers a suite of protocols and utilities to help
 - <doc:Comparable>
 - <doc:Trackable>
 - <doc:Transformable>
+
+### Complex
+
+- <doc:Complex>
+- <doc:Math>
+- <doc:Math/Numeric>
+- <doc:Math/besselJ(n:x:)>
+- <doc:Math/erf(_:)>
+- <doc:Math/gamma(_:)>
+- <doc:Math/gamma(_:_:)>
+- <doc:Math/legendreP(n:x:)>
 
 ### Validation & Formatting
 
@@ -72,6 +92,13 @@ The ScribbleFoundation library offers a suite of protocols and utilities to help
 - <doc:RateLimitStatus>
 - <doc:RateLimitEventType>
 
+### Random
+
+- <doc:Random>
+- <doc:Random/MersenneTwister>
+- <doc:Random/MarkovChain>
+- <doc:Random/generateNumber(lowerBound:upperBound:)>
+
 ### Networking
 
 - <doc:Networking>
@@ -80,6 +107,11 @@ The ScribbleFoundation library offers a suite of protocols and utilities to help
 - <doc:APIEndpoint>
 - <doc:SCRNetworkingMonitor>
 - <doc:SCRURLSessionNetworkService>
+
+### Numeric
+
+- <doc:UInt9>
+- <doc:UInt19>
 
 ### Data Handling
 
