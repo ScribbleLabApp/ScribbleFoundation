@@ -54,10 +54,11 @@ public typealias BadgeLabel = RawRepresentable & CustomStringConvertible
 ///   - cornerRadius: The radius of the badge's rounded corners. By default, this is set to `20`. Adjust this to control how rounded the corners appear.
 @available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
-    public var name: String
-    public var foregroundColor: Color
-    public var fontWeight: Font.Weight = .semibold
-    public var cornerRadius: CGFloat   = 20
+    public  var name:            String
+    public  var foregroundColor: Color
+    public  var fontWeight:      Font.Weight = .semibold
+    public  var cornerRadius:    CGFloat     = 20
+    private var uppercase:       Bool        = true
 
     /// Initializes a `Badge` using a predefined enum case that conforms to `BadgeLabel`.
     ///
@@ -84,7 +85,7 @@ public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
     }
 
     public var body: some View {
-        Text(name.uppercased())
+        Text(uppercase ? name.uppercased() : name)
             .fontWeight(fontWeight)
             .foregroundStyle(foregroundColor)
             .padding()
@@ -134,8 +135,21 @@ public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
         return newBadge
     }
     
-    public func disableUppercase() {
-        
+    /// Disables the default uppercase transformation of the badge's text.
+    ///
+    /// By default, the badge text is displayed in uppercase. This method allows you to keep the text as is, without converting it to uppercase.
+    ///
+    /// - Returns: A view with the text displayed in its original case.
+    public func disableUppercase() -> some View {
+        var newBadge = self
+        newBadge.uppercase = false
+        return newBadge
+    }
+    
+    public func _unchangedCaseName() -> some View {
+        var newBadge = self
+        newBadge.uppercase = false
+        return newBadge
     }
 }
 
