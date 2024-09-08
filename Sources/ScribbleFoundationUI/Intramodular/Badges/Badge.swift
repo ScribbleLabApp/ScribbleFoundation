@@ -32,19 +32,52 @@
 import SwiftUI
 import Foundation
 
+/// A protocol that represents types suitable for use in badges.
+/// It requires conformance to `RawRepresentable` and `CustomStringConvertible`.
+///
+/// Types that conform to `BadgeLabel` can be used to create badges with predefined text values.
+/// For example, you can use enum cases to generate badges with specific labels.
 @available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public typealias BadgeLabel = RawRepresentable & CustomStringConvertible
 
+/// A customizable badge view that displays a text label with optional foreground color, font weight, and corner radius.
+///
+/// The `Badge` struct allows you to create badges using either predefined enum cases or custom strings.
+/// It provides customization options for text color, border color, font weight, and corner radius. The badge text is
+/// displayed in uppercase by default.
+///
+/// - Parameters:
+///   - T: A type that conforms to `BadgeLabel`. This type provides the text for the badge through its `rawValue`.
+///   - name: The text to display in the badge. This parameter is used when creating a badge with a custom string.
+///   - foregroundColor: The color of the badge's text and border. By default, this is set to `.black`.
+///   - fontWeight: The weight of the badge text. The default value is `.semibold`. Other values can be provided to adjust the text appearance.
+///   - cornerRadius: The radius of the badge's rounded corners. By default, this is set to `20`. Adjust this to control how rounded the corners appear.
 @available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
     public var name: String
     public var foregroundColor: Color
+    public var fontWeight: Font.Weight = .semibold
+    public var cornerRadius: CGFloat   = 20
 
+    /// Initializes a `Badge` using a predefined enum case that conforms to `BadgeLabel`.
+    ///
+    /// This initializer sets the badge text based on the `rawValue` of the enum case.
+    ///
+    /// - Parameters:
+    ///   - type: The enum case providing the text for the badge.
+    ///   - foregroundColor: The color of the badge's text and border. Defaults to `.black`.
     public init(type: T, foregroundColor: Color = .black) {
         self.name = type.rawValue
         self.foregroundColor = foregroundColor
     }
 
+    /// Initializes a `Badge` using a custom string.
+    ///
+    /// This initializer allows you to specify any text for the badge.
+    ///
+    /// - Parameters:
+    ///   - name: The text to display in the badge.
+    ///   - foregroundColor: The color of the badge's text and border. Defaults to `.black`.
     public init(name: String, foregroundColor: Color = .black) {
         self.name = name
         self.foregroundColor = foregroundColor
@@ -52,18 +85,64 @@ public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
 
     public var body: some View {
         Text(name.uppercased())
-            .fontWeight(.semibold)
+            .fontWeight(fontWeight)
             .foregroundStyle(foregroundColor)
             .padding()
             .roundedCornerWithBorder(
                 lineWidth: 2, 
                 borderColor: foregroundColor,
-                radius: 20,
+                radius: cornerRadius,
                 corners: [.allCorners]
             )
     }
+    
+    /// Updates the color of the badge's text and border.
+    ///
+    /// This method allows you to change the foreground color of the badge.
+    ///
+    /// - Parameters:
+    ///   - color: The new color for the badge's text and border.
+    /// - Returns: A view with the updated foreground and background colors.
+    public func badgeColor(_ color: Color) -> some View {
+        var newBadge = self
+        newBadge.foregroundColor = color
+        return newBadge
+    }
+    
+    /// Customizes the badge's text weight and/or corner radius.
+    ///
+    /// This method allows you to adjust the font weight and corner radius of the badge. You can specify one or both parameters.
+    ///
+    /// - Parameters:
+    ///   - fontWeight: The new weight for the badge's text. If `nil`, the default weight (`.semibold`) is used.
+    ///   - cornerRadius: The new radius for the badge's corners. If `nil`, the default radius (`20`) is used.
+    /// - Returns: A view with the updated text weight and/or corner radius.
+    public func badgeStyle(
+        fontWeight: Font.Weight? = nil,
+        cornerRadius: CGFloat? = nil
+    ) -> some View {
+        var newBadge = self
+        
+        if let fontWeight = fontWeight {
+            newBadge.fontWeight = fontWeight
+        }
+        
+        if let cornerRadius = cornerRadius {
+            newBadge.cornerRadius = cornerRadius
+        }
+        
+        return newBadge
+    }
+    
+    public func disableUppercase() {
+        
+    }
 }
 
+/// An enum representing predefined badge types used in the ScribbleLab app.
+///
+/// Conforms to `BadgeLabel` to provide a set of predefined badge labels.
+/// You can use these enum cases to initialize badges with standard text values.
 @available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public enum ScribbleBadgeType: String, BadgeLabel {
     case staff      = "STAFF"
@@ -76,6 +155,10 @@ public enum ScribbleBadgeType: String, BadgeLabel {
     }
 }
 
+/// An enum representing various user badge types.
+///
+/// Conforms to `BadgeLabel` to provide a set of predefined user badge labels.
+/// You can use these enum cases to initialize badges that represent different user statuses or tiers.
 @available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public enum UserBadgeType: String, BadgeLabel {
     case verified   = "VERIFIED"
