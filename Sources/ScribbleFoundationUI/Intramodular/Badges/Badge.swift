@@ -32,12 +32,33 @@
 import SwiftUI
 import Foundation
 
-public struct Badge: View {
+@available(iOS, macOS, tvOS, watchOS 18.0, *)
+public typealias BadgeLabel = RawRepresentable & CustomStringConvertible
+
+@available(iOS, macOS, tvOS, watchOS 18.0, *)
+public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
+    public var name: String
+    public var borderColor: Color
+
+    public init(type: T, borderColor: Color = .black) {
+        self.name = type.rawValue
+        self.borderColor = borderColor
+    }
+
+    public init(name: String, borderColor: Color = .black) {
+        self.name = name
+        self.borderColor = borderColor
+    }
+
     public var body: some View {
-        VStack {
-            Text("Test")
-                .padding()
-                
-        }
+        Text(name.uppercased())
+            .fontWeight(.semibold)
+            .padding()
+            .roundedCornerWithBorder(
+                lineWidth: 2, 
+                borderColor: borderColor,
+                radius: 20,
+                corners: [.allCorners]
+            )
     }
 }

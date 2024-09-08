@@ -32,22 +32,28 @@
 import SwiftUI
 import Foundation
 
-/// A custom `Shape` that creates rounded corners for a given view,
-/// allowing selective rounding of specific corners and applying a border.
+/// A versatile `Shape` that provides rounded corners for a `SwiftUI` view.
 ///
-/// The `RoundedCorner` structure enables you to define a shape with rounded corners
-/// on a `SwiftUI` view. It takes two parameters:
-/// - `radius`: Determines the radius of the rounding. Default value is set to `.infinity`.
-/// - `corners`: Specifies which corners to round. Default is `.allCorners`.
+/// The `RoundedCorner` shape allows you to apply customized corner rounding
+/// to any view, letting you specify both the radius of the corners and
+/// which specific corners should be rounded. This can be especially useful
+/// for creating unique, non-standard shapes for UI elements.
 ///
-/// This structure works alongside an extension to the `View` which provides
-/// the `roundedCornerWithBorder` modifier. This modifier allows for both
-/// clipping the shape to the desired corner radius and overlaying a border.
+/// - Parameters:
+///   - radius: A `CGFloat` value determining the radius of the rounded corners.
+///     The default value is `.infinity`, creating fully rounded corners.
+///   - corners: A `UIRectCorner` option set that specifies which corners should be rounded.
+///     The default value is `.allCorners`.
 ///
-/// You can use the `roundedCornerWithBorder` modifier to apply rounded corners
-/// to specific corners of your view, as well as define a border.
+/// ### Usage
+/// Combine this shape with a custom modifier `roundedCornerWithBorder` to create
+/// flexible UI designs by applying both corner rounding and borders to views.
 ///
-/// ### Using All Side Corner Radius with Border
+/// - SeeAlso: ``View.roundedCornerWithBorder(lineWidth:borderColor:radius:corners:)```
+///
+/// ### Example 1 - All Corners Rounded with Border
+///
+/// Use `roundedCornerWithBorder` to round all corners and apply a border.
 ///
 /// ```swift
 /// var body: some View {
@@ -63,9 +69,11 @@ import Foundation
 /// }
 /// ```
 ///
-/// ![An image demonstrating all Sides Rounded with Border](roundedcornersall)
+/// ![All Corners Rounded Example](https://github.com/ScribbleLabApp/ScribbleFoundation/blob/main/Sources/ScribbleFoundationUI/Documentation.docc/Resources/roundedcornersall.png)
 ///
-/// ### For Top Left & Bottom Left Side Corner Radius with Border
+/// ### Example 2 - Top Left & Bottom Left Rounded with Border
+///
+/// Round only the top-left and bottom-left corners with a border.
 ///
 /// ```swift
 /// var body: some View {
@@ -81,9 +89,11 @@ import Foundation
 /// }
 /// ```
 ///
-/// ![An image demonstrating all Top Left & Bottom Left Side Corner Radius with Border](r3wqef3wfr)
+/// ![Top Left & Bottom Left Rounded Example](https://github.com/ScribbleLabApp/ScribbleFoundation/blob/main/Sources/ScribbleFoundationUI/Documentation.docc/Resources/r3wqef3wf.png)
 ///
-/// ### Top Right & Bottom Right Rounded with Border
+/// ### Example 3 - Top Right & Bottom Right Rounded with Border
+///
+/// Customize rounding to only the top-right and bottom-right corners.
 ///
 /// ```swift
 /// var body: some View {
@@ -99,9 +109,11 @@ import Foundation
 /// }
 /// ```
 ///
-/// ![An image demonstrating Top Right & Bottom Right Rounded with Border](r2f34wfr)
+/// ![Top Right & Bottom Right Rounded Example](https://github.com/ScribbleLabApp/ScribbleFoundation/blob/main/Sources/ScribbleFoundationUI/Documentation.docc/Resources/r2f34wfr.png)
 ///
-/// ### Top Left & Bottom Right Rounded with Border
+/// ### Example 4 - Top Left & Bottom Right Rounded with Border
+///
+/// Round diagonal corners (top-left and bottom-right) for a unique effect.
 ///
 /// ```swift
 /// var body: some View {
@@ -117,19 +129,20 @@ import Foundation
 /// }
 /// ```
 ///
-/// ![An image demonstrating Top Right & Bottom Right Rounded with Border](fd3gtrdr)
+/// ![Diagonal Rounded Corners Example](https://github.com/ScribbleLabApp/ScribbleFoundation/blob/main/Sources/ScribbleFoundationUI/Documentation.docc/Resources/fd3gtrdr.png)
+///
 public struct RoundedCorner: Shape {
     
-    /// The radius of the corner rounding. Default is `.infinity`.
+    /// The radius for the corner rounding.
     public var radius: CGFloat = .infinity
     
-    /// The corners to be rounded. Default is `.allCorners`.
+    /// The specific corners to apply the rounding to.
     public var corners: UIRectCorner = .allCorners
     
     /// Generates the path for the rounded corner shape.
     ///
-    /// - Parameter rect: The rectangular area in which the rounded corners will be applied.
-    /// - Returns: A `Path` object describing the shape.
+    /// - Parameter rect: The rectangular area in which the shape is drawn.
+    /// - Returns: A `Path` object describing the rounded corners within the given rectangle.
     public nonisolated func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(
             roundedRect:        rect,
@@ -152,6 +165,8 @@ extension View {
     ///   - radius: The radius of the corner rounding.
     ///   - corners: The corners to be rounded.
     /// - Returns: A view with rounded corners and a border.
+    ///
+    /// - SeeAlso: ``ScribbleFoundationUI/roundedCornerWithBorder(lineWidth:borderColor:radius:corners:)``
     public func roundedCornerWithBorder(
         lineWidth: CGFloat,
         borderColor: Color,

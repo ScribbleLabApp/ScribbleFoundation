@@ -1,0 +1,15 @@
+{
+  "originHash" : "790b52a6cc0a9a9c86e4c954bffa62dbe0a54f73de169dcbb4026cffb41938e3",
+  "pins" : [
+    {
+      "identity" : "swift-atomics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-atomics.git",
+      "state" : {
+        "revision" : "cd142fd2f64be2100422d658e7411e39489da985",
+        "version" : "1.2.0"
+      }
+    }
+  ],
+  "version" : 3
+}
