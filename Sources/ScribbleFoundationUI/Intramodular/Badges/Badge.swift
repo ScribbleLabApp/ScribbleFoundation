@@ -32,33 +32,60 @@
 import SwiftUI
 import Foundation
 
-@available(iOS, macOS, tvOS, watchOS 18.0, *)
+@available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public typealias BadgeLabel = RawRepresentable & CustomStringConvertible
 
-@available(iOS, macOS, tvOS, watchOS 18.0, *)
+@available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
 public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
     public var name: String
-    public var borderColor: Color
+    public var foregroundColor: Color
 
-    public init(type: T, borderColor: Color = .black) {
+    public init(type: T, foregroundColor: Color = .black) {
         self.name = type.rawValue
-        self.borderColor = borderColor
+        self.foregroundColor = foregroundColor
     }
 
-    public init(name: String, borderColor: Color = .black) {
+    public init(name: String, foregroundColor: Color = .black) {
         self.name = name
-        self.borderColor = borderColor
+        self.foregroundColor = foregroundColor
     }
 
     public var body: some View {
         Text(name.uppercased())
             .fontWeight(.semibold)
+            .foregroundStyle(foregroundColor)
             .padding()
             .roundedCornerWithBorder(
                 lineWidth: 2, 
-                borderColor: borderColor,
+                borderColor: foregroundColor,
                 radius: 20,
                 corners: [.allCorners]
             )
+    }
+}
+
+@available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
+public enum ScribbleBadgeType: String, BadgeLabel {
+    case staff      = "STAFF"
+    case mod        = "MOD"
+    case support    = "SUPPORT"
+    case developer  = "DEVELOPER"
+    
+    public var description: String {
+        return self.rawValue
+    }
+}
+
+@available(iOS 18.0, macOS 18.0, tvOS 18.0, *)
+public enum UserBadgeType: String, BadgeLabel {
+    case verified   = "VERIFIED"
+    case premium    = "PREMIUM"
+    case enterprise = "ENTERPRISE"
+    case pro        = "PRO"
+    case free       = "FREE"
+    case beta       = "BETA"
+    
+    public var description: String {
+        return self.rawValue
     }
 }
