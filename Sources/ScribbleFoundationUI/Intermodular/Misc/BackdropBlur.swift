@@ -38,7 +38,6 @@ import Foundation
 /// visual backdrop effect (similar to the blurring effect seen in system UI elements). It overrides the `layerClass` property
 /// to return `CABackdropLayer`, a private Core Animation class.
 ///
-/// ### Example:
 /// ```swift
 /// let backdropView = UIBackdropView()
 /// // Use `backdropView` in your custom UIView hierarchy
@@ -127,5 +126,294 @@ public struct Blur: View {
     public var body: some View {
         Backdrop()
             .blur(radius: radius, opaque: opaque)
+    }
+}
+
+/// A SwiftUI view that combines blur and saturation effects over a `Backdrop`.
+///
+/// `SaturationBlur` adds flexibility by applying both a blur and saturation adjustment,
+/// allowing you to create vivid or desaturated blur effects.
+///
+
+/// ```swift
+/// struct ContentView: View {
+///     var body: some View {
+///         SaturationBlur(radius: 5, saturation: 0.8)
+///             .frame(width: 300, height: 300)
+///     }
+/// }
+/// ```
+///
+/// - Parameters:
+///   - radius: The intensity of the blur effect.
+///   - saturation: The level of color saturation, where `1.0` is normal.
+///
+@available(iOS 18.0, macOS 15.0, *)
+public struct SaturationBlur: View {
+    
+    var radius: CGFloat = 3
+    var opaque: Bool = false
+    var saturation: Double = 1.0
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .saturation(saturation)
+    }
+}
+
+/// A SwiftUI view that applies a customizable blur effect with rounded corners.
+///
+/// `RoundedBackdrop` allows for applying a blur effect along with a `RoundedRectangle` shape
+/// to achieve rounded corners for a blurred region.
+///
+/// ```swift
+/// struct ContentView: View {
+///     var body: some View {
+///         RoundedBackdrop(radius: 10, cornerRadius: 20)
+///             .frame(width: 200, height: 200)
+///     }
+/// }
+/// ```
+///
+/// - Parameters:
+///   - radius: The intensity of the blur.
+///   - cornerRadius: The radius of the corners to round.
+///
+@available(iOS 18.0, macOS 15.0, *)
+public struct RoundedBackdrop: View {
+    
+    var radius: CGFloat = 3
+    var cornerRadius: CGFloat = 12
+    var opaque: Bool = false
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+    }
+}
+
+/// A SwiftUI view that applies a blur effect and shadow over a `Backdrop`.
+///
+/// `ShadowedBackdrop` applies a blur combined with a shadow to give depth to your UI.
+///
+/// ```swift
+/// struct ContentView: View {
+///     var body: some View {
+///         ShadowedBackdrop(radius: 10, shadowColor: .black, shadowRadius: 10)
+///             .frame(width: 300, height: 300)
+///     }
+/// }
+/// ```
+///
+/// - Parameters:
+///   - radius: The blur radius.
+///   - shadowColor: The color of the shadow.
+///   - shadowRadius: The intensity of the shadow.
+///
+@available(iOS 18.0, macOS 15.0, *)
+public struct ShadowedBackdrop: View {
+    
+    var radius: CGFloat = 3
+    var opaque: Bool = false
+    var shadowColor: Color = .black
+    var shadowRadius: CGFloat = 10
+    var shadowX: CGFloat = 0
+    var shadowY: CGFloat = 5
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .shadow(
+                color: shadowColor.opacity(0.3),
+                radius: shadowRadius,
+                x: shadowX,
+                y: shadowY
+            )
+    }
+}
+
+/// A SwiftUI view that applies a gradient overlay on top of a blur effect.
+///
+/// `GradientBackdrop` adds a linear gradient on top of the backdrop blur,
+/// allowing you to create a colorful visual effect.
+///
+/// ```swift
+/// struct ContentView: View {
+///     var body: some View {
+///         GradientBackdrop(radius: 10, gradientColors: [.red, .blue])
+///             .frame(width: 300, height: 300)
+///     }
+/// }
+/// ```
+///
+/// - Parameters:
+///   - radius: The blur radius.
+///   - gradientColors: An array of `Color` to create the gradient.
+///
+@available(iOS 18.0, macOS 15.0, *)
+public struct GradientBackdrop: View {
+    
+    var radius: CGFloat = 3
+    var opaque: Bool = false
+    var gradientColors: [Color] = [.blue, .purple, .pink]
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .overlay(
+                LinearGradient(
+                    gradient: Gradient(colors: gradientColors),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .opacity(0.5)
+            )
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+public struct ScalableBackdrop: View {
+    
+    var radius: CGFloat = 3
+    var scale: CGFloat = 1.0
+    var opaque: Bool = false
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .scaleEffect(scale)
+            .animation(.easeInOut(duration: 0.3), value: scale)
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+public struct MotionBlur: View {
+    var radius: CGFloat = 5
+    var direction: Angle = .degrees(0)
+    var opaque: Bool = false
+    
+    public var body: some View {
+        Backdrop()
+            .rotationEffect(direction)
+            .blur(radius: radius, opaque: opaque)
+    }
+    
+    /// Modifier to adjust the blur radius
+    public func blurRadius(_ radius: CGFloat) -> MotionBlur {
+        var blur = self
+        blur.radius = radius
+        return blur
+    }
+    
+    /// Modifier to adjust the direction of the blur
+    public func blurDirection(_ direction: Angle) -> MotionBlur {
+        var blur = self
+        blur.direction = direction
+        return blur
+    }
+    
+    /// Modifier to adjust opacity
+    public func blurOpaque(_ opaque: Bool) -> MotionBlur {
+        var blur = self
+        blur.opaque = opaque
+        return blur
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+public struct BoxBlur: View {
+    
+    var radius: CGFloat = 8
+    var opaque: Bool = false
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .mask(Rectangle().padding(-radius))
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+public struct BokehBlur: View {
+    var radius: CGFloat = 15
+    var bokehStrength: CGFloat = 0.8
+    var opaque: Bool = false
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .brightness(bokehStrength)
+            .overlay(
+                Circle()
+                    .fill(Color.white.opacity(0.3))
+                    .scaleEffect(bokehStrength)
+            )
+    }
+    
+    /// Modifier to adjust the Bokeh strength
+    public func bokehStrength(_ strength: CGFloat) -> BokehBlur {
+        var blur = self
+        blur.bokehStrength = strength
+        return blur
+    }
+    
+    /// Modifier to adjust the blur radius
+    public func blurRadius(_ radius: CGFloat) -> BokehBlur {
+        var blur = self
+        blur.radius = radius
+        return blur
+    }
+    
+    /// Modifier to adjust opacity
+    public func blurOpaque(_ opaque: Bool) -> BokehBlur {
+        var blur = self
+        blur.opaque = opaque
+        return blur
+    }
+}
+
+@available(iOS 18.0, macOS 15.0, *)
+public struct TiltShiftBlur: View {
+    var radius: CGFloat = 10
+    var focalPoint: UnitPoint = .center
+    var opaque: Bool = false
+    
+    public var body: some View {
+        Backdrop()
+            .blur(radius: radius, opaque: opaque)
+            .mask(
+                LinearGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: .clear, location: 0),
+                        .init(color: .black, location: 0.5),
+                        .init(color: .clear, location: 1)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+    }
+    
+    /// Modifier to adjust the blur radius
+    public func blurRadius(_ radius: CGFloat) -> TiltShiftBlur {
+        var blur = self
+        blur.radius = radius
+        return blur
+    }
+    
+    /// Modifier to adjust the focal point
+    public func focalPoint(_ point: UnitPoint) -> TiltShiftBlur {
+        var blur = self
+        blur.focalPoint = point
+        return blur
+    }
+    
+    /// Modifier to adjust opacity
+    public func blurOpaque(_ opaque: Bool) -> TiltShiftBlur {
+        var blur = self
+        blur.opaque = opaque
+        return blur
     }
 }

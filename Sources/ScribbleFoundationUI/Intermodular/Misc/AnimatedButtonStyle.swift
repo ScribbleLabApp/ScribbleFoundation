@@ -110,7 +110,6 @@ public struct AnimatedButtonStyle: ButtonStyle {
     }
 }
 
-// TODO: Make parameters optional in the future
 @available(iOS 18.0, macOS 15.0, *)
 public extension View {
     
@@ -139,6 +138,7 @@ public extension View {
         gradientColors: [Color] = [.red, .yellow, .green, .blue, .purple, .pink],
         animationDuration: Double = 2.0
     ) -> some View {
-        self.buttonStyle(AnimatedButtonStyle(gradientColors: gradientColors, animationDuration: animationDuration))
+        self.buttonStyle(AnimatedButtonStyle(gradientColors: gradientColors,
+                                             animationDuration: animationDuration))
     }
 }
