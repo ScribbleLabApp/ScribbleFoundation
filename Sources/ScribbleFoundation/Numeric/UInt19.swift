@@ -114,6 +114,8 @@ public struct UInt19 {
 /// Define a type alias `uint19_t` for `UInt19`.
 public typealias uint19_t = UInt19
 
+// swiftlint:disable operator_whitespace
+
 // MARK: - Arithmetic Operations
 public extension UInt19 {
     
@@ -283,3 +285,5 @@ extension UInt19: Comparable {
         return lhs.value > rhs.value
     }
 }
+
+// swiftlint:enable operator_whitespace

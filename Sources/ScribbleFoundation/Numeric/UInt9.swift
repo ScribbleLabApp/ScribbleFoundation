@@ -118,6 +118,8 @@ public struct UInt9 {
 /// Define a type alias `uint9_t` for `UInt9`.
 public typealias uint9_t = UInt9
 
+// swiftlint:disable operator_whitespace
+
 // MARK: - Arithmetic Operations
 public extension UInt9 {
     
@@ -293,3 +295,5 @@ extension UInt9: Comparable {
         }
     }
 }
+
+// swiftlint:enable operator_whitespace
