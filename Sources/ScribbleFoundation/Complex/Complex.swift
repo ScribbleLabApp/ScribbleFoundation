@@ -183,7 +183,7 @@ public struct Complex {
     /// - Returns: Arc tangent of the complex number.
     public func atan() -> Complex {
         let i = Complex(real: 0.0, imaginary: 1.0)
-        let _ = Complex(real: 1.0, imaginary: 0.0)
+        _ = Complex(real: 1.0, imaginary: 0.0)
         let term1 = (i + self) / (i - self)
         return (i / 2.0) * term1.log()
     }
