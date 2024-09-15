@@ -32,7 +32,7 @@
 import SwiftUI
 import Foundation
 
-//swiftlint:disable line_length
+// swiftlint:disable line_length
 
 /// A versatile `Shape` that provides rounded corners for a `SwiftUI` view.
 ///
@@ -181,4 +181,4 @@ extension View {
     }
 }
 
-//swiftlint:enable line_length
+// swiftlint:enable line_length
