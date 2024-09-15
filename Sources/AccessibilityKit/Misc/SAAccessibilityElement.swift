@@ -202,29 +202,29 @@ public extension View {
         )
     }
     
-    /// Adds custom accessibility actions to a view for VoiceOver users.
-    ///
-    /// This method enables the addition of custom VoiceOver actions, which can be triggered via
-    /// specific VoiceOver gestures. Each action consists of a name and an associated closure that
-    /// is executed when the action is selected.
-    ///
-    /// - Parameters:
-    ///   - view:    The `AnyView` to which the custom actions should be applied.
-    ///   - actions: An array of tuples where each tuple contains a `String` for the action
-    ///              name and a closure (`() -> Void`) that executes the corresponding action.
-    ///
-    /// - Returns: A modified `AnyView` with the specified accessibility actions.
-    ///
-    /// ```swift
-    /// let buttonView = Button("Tap Me") {}
-    /// let accessibleButton = AccessibilityHelper.addAccessibilityActions(
-    ///     view: AnyView(buttonView),
-    ///     actions: [
-    ///         ("Action 1", { print("Action 1 performed") }),
-    ///         ("Action 2", { print("Action 2 performed") })
-    ///     ]
-    /// )
-    /// ```
+//    /// Adds custom accessibility actions to a view for VoiceOver users.
+//    ///
+//    /// This method enables the addition of custom VoiceOver actions, which can be triggered via
+//    /// specific VoiceOver gestures. Each action consists of a name and an associated closure that
+//    /// is executed when the action is selected.
+//    ///
+//    /// - Parameters:
+//    ///   - view:    The `AnyView` to which the custom actions should be applied.
+//    ///   - actions: An array of tuples where each tuple contains a `String` for the action
+//    ///              name and a closure (`() -> Void`) that executes the corresponding action.
+//    ///
+//    /// - Returns: A modified `AnyView` with the specified accessibility actions.
+//    ///
+//    /// ```swift
+//    /// let buttonView = Button("Tap Me") {}
+//    /// let accessibleButton = AccessibilityHelper.addAccessibilityActions(
+//    ///     view: AnyView(buttonView),
+//    ///     actions: [
+//    ///         ("Action 1", { print("Action 1 performed") }),
+//    ///         ("Action 2", { print("Action 2 performed") })
+//    ///     ]
+//    /// )
+//    /// ```
 //    static func addAccessibilityActions(
 //        view: AnyView,
 //        actions: [(String, () -> Void)]
