@@ -146,6 +146,7 @@ public struct Badge<T: BadgeLabel>: View where T.RawValue == String {
         return newBadge
     }
     
+    //swiftlint:disable:next identifier_name
     public func _unchangedCaseName() -> some View {
         var newBadge = self
         newBadge.uppercase = false

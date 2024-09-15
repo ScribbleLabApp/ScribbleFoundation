@@ -32,6 +32,8 @@
 import SwiftUI
 import Foundation
 
+//swiftlint:disable line_length
+
 /// A versatile `Shape` that provides rounded corners for a `SwiftUI` view.
 ///
 /// The `RoundedCorner` shape allows you to apply customized corner rounding
@@ -178,3 +180,5 @@ extension View {
             .stroke(borderColor, lineWidth: lineWidth))
     }
 }
+
+//swiftlint:enable line_length

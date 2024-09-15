@@ -41,6 +41,9 @@ import AppKit
 
 import Foundation
 
+//swiftlint:disable cyclomatic_complexity
+//swiftlint:disable private_over_fileprivate
+
 /// A protocol that defines a font family and provides utilities for applying custom fonts.
 ///
 /// Conforming types represent different font families. The protocol includes methods for
@@ -296,3 +299,6 @@ private extension UIFont.TextStyle {
         }
     }
 }
+
+//swiftlint:enable cyclomatic_complexity
+//swiftlint:enable private_over_fileprivate
