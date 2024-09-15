@@ -64,6 +64,8 @@ public struct Complex {
         return atan2(imaginary, real)
     }
     
+    // swiftlint:disable operator_whitespace
+    
     /// Adds two complex numbers.
     ///
     /// - Parameters:
@@ -108,6 +110,8 @@ public struct Complex {
         let imaginary = (lhs.imaginary * rhs.real - lhs.real * rhs.imaginary) / denominator
         return Complex(real: real, imaginary: imaginary)
     }
+    
+    // swiftlint:enable operator_whitespace
     
     /// Computes the exponential of a complex number.
     ///
@@ -207,6 +211,8 @@ public struct Complex {
         return Complex(real: real, imaginary: imaginary)
     }
     
+    // swiftlint:disable operator_whitespace
+    
     /// Negates a complex number.
     ///
     /// - Parameter operand: The complex number to negate.
@@ -240,7 +246,11 @@ public struct Complex {
     public static func -=(lhs: inout Complex, rhs: Complex) {
         lhs = lhs - rhs
     }
+    
+    // swiftlint:enable operator_whitespace
 }
+
+// swiftlint:disable operator_whitespace
 
 /// Scalar multiplication
 ///
@@ -263,3 +273,4 @@ public func /(lhs: Complex, rhs: Double) -> Complex {
 }
 
 // swiftlint:enable identifier_name
+// swiftlint:enable operator_whitespace
