@@ -1,23 +1,23 @@
 name: Compile gyb sources 🚀
 
 on:
-    workflow_dispatch:
-      inputs:
-        trigger:
-          description: "Manually trigger the workflow"
-          required: true
-          default: "true"
-    push:
-      branches:
-        - main
-      paths:
-        - ".github/workflows/compile_gyb_sources.yml"
-        - "utils/generate_sources.sh"
-        - "*.swift.gyb"
-        - "*.mm.gyb"
-    pull_request:
-      branches:
-        - main
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/compile_gyb_sources.yml"
+      - "utils/generate_sources.sh"
+      - "*.swift.gyb"
+      - "*.mm.gyb"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: "Manually trigger the workflow"
+        required: true
+        default: "true"
 
 jobs:
     compile_gyb_sources:
