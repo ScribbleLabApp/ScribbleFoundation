@@ -1,5 +1,5 @@
 //
-//  _AnchorSourceValue.swift
+//  Hasher+CGRect.swift
 //  ScribbleFoundationUI
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
@@ -29,32 +29,13 @@
 //  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import SwiftUI
+import Foundation
 
-@frozen
-public enum _AnchorSourceValue: Equatable {
-    private enum InitializationError: Error {
-        case failedToExtract
-    }
-    
-    case point(CGPoint)
-    case unitPoint(UnitPoint)
-    case rect(CGRect)
-     
-    public init<T>(from source: Anchor<T>.Source) throws {
-        guard let value = Mirror(reflecting: source)[_ScribbleFoundation_keyPath: "box.value"] else {
-            throw InitializationError.failedToExtract
-        }
-        
-        switch value {
-        case let value as CGPoint:
-            self = .point(value)
-        case let value as UnitPoint:
-            self = .unitPoint(value)
-        case let value as CGRect:
-            self = .rect(value)
-        default:
-            throw InitializationError.failedToExtract
-        }
+extension Hasher {
+    mutating func combine(_ rect: CGRect) {
+        combine(rect.origin.x)
+        combine(rect.origin.y)
+        combine(rect.size.width)
+        combine(rect.size.height)
     }
 }
