@@ -87,7 +87,7 @@ public struct FeatureAvailabilityChecker: Availability {
         return condition()
     }
     
-    // TODO: Adjust for macOS canImport(UIKit)
+    #if canImport(UIKit)
     public func availabilityReason() -> String {
         let currentVersion = ProcessInfo.processInfo.operatingSystemVersion
         let currentDeviceType = getCurrentDeviceType()
@@ -118,4 +118,5 @@ public struct FeatureAvailabilityChecker: Availability {
         
         return "Feature is not available due to custom conditions."
     }
+    #endif
 }
