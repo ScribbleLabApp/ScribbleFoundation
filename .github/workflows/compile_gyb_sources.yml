@@ -1,0 +1,57 @@
+name: Compile gyb sources 🚀
+
+on:
+    workflow_dispatch:
+      inputs:
+        trigger:
+          description: "Manually trigger the workflow"
+          required: true
+          default: "true"
+    push:
+      branches:
+        - main
+      paths:
+        - ".github/workflows/compile_gyb_sources.yml"
+        - "utils/generate_sources.sh"
+        - "*.swift.gyb"
+        - "*.mm.gyb"
+    pull_request:
+      branches:
+        - main
+
+jobs:
+    compile_gyb_sources:
+        runs-on: macOS-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - name: Run generate_sources.sh
+              run: |
+                chmod +x ./utils/generate_sources.sh
+                ./utils/generate_sources.sh
+            
+            - name: Check for changes
+              id: check_changes
+              run: |
+                git diff --exit-code || echo "Changes detected" > changes.txt
+            - name: Commit and push changes
+              if: steps.check_changes.outputs.changed == 'true'
+              run: |
+                git config user.name "GitHub Actions"
+                git config user.email "actions@github.com"
+                git add .
+                git commit -m "(automated/ci): Generate missing swift.gyb Sources"
+                git push origin HEAD:automated-update-contributors
+                - name: Install GitHub CLI on macOS
+                run: |
+                  brew install gh
+              
+            - name: Create Pull Request
+              if: steps.check_changes.outputs.changed == 'true'
+              run: |
+                gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+                gh pr create --title "Automated update of CONTRIBUTORS.md" \
+                             --body "This pull request updates the CONTRIBUTORS.md file with the latest contributor information." \
+                             --base main \
+                             --head automated-update-contributors \
+                             --repo ${{ github.repository }}
