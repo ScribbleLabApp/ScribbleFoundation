@@ -108,6 +108,7 @@ public struct SCRLog {
         case debug
         case warning
         case log
+        case a11y
         
         /// Returns a string representation of the category for logging purposes.
         ///
@@ -118,6 +119,7 @@ public struct SCRLog {
             case .debug: return "DEBUG"
             case .warning: return "WARNING"
             case .log: return "LOG"
+            case .a11y: return "A11Y"
             }
         }
     }
@@ -160,6 +162,15 @@ public extension SCRLog {
     func log(_ message: String) {
         let logger = self.logger(for: .log)
         logger.log("LOG: \(message)")
+    }
+    
+    /// Logs a a11y message.
+    ///
+    /// - Parameters:
+    ///   - message: The a11y message to log.
+    func a11y(_ message: String) {
+        let logger = self.logger(for: .a11y)
+        logger.log("A11Y: \(message)")
     }
     
 }

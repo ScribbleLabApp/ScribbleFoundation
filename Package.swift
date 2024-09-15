@@ -12,7 +12,10 @@ let package = Package(
             targets: ["ScribbleFoundation"]),
         .library(
             name: "ScribbleFoundationUI",
-            targets: ["ScribbleFoundationUI"])
+            targets: ["ScribbleFoundationUI"]),
+        .library(
+            name: "AccessibilityKit",
+            targets: ["ScribbleFoundationUI", "ScribbleFoundation"])
     ],
     dependencies: [
         .package(
@@ -26,6 +29,11 @@ let package = Package(
             dependencies: [
                 .product(name: "Atomics", package: "swift-atomics")
             ]
+        ),
+        .target(
+            name: "AccessibilityKit",
+            dependencies: ["ScribbleFoundationUI", "ScribbleFoundation"],
+            path: "Sources/AccessibilityKit"
         ),
         .target(
             name: "ScribbleFoundationUI",

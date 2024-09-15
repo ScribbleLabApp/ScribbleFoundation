@@ -1,6 +1,6 @@
 //
-//  AccessibilityElement.swift
-//  ScribbleFoundationUI
+//  SAAccessibilityElement.swift
+//  AccessibilityKit
 //
 //  Copyright (c) 2024 ScribbleLabApp LLC. All rights reserved
 //
@@ -31,6 +31,8 @@
 
 import SwiftUI
 import Foundation
+
+import ScribbleFoundationUI
 
 /// A SwiftUI View extension to enhance accessibility by adding custom labels, hints, traits, values,
 /// focus handling, and actions.
@@ -149,22 +151,158 @@ public extension View {
     }
 }
 
+/// A utility class that centralizes accessibility-related functionality for SwiftUI views.
+///
+/// The `AccessibilityHelper` class provides commonly-used accessibility methods to make SwiftUI
+/// views more accessible to VoiceOver users. It includes functionalities for setting accessibility labels, hints,
+/// traits, values, focus management, and custom actions.
+///
+/// The class is designed to ensure that accessibility features are applied consistently and efficiently across
+/// various UI components.
+///
+/// - Important: All the methods in this class are static, meaning they can be used without instantiating the class.
 @available(iOS 18.0, macOS 15.0, *)
 public extension View {
-    /// Utility to conditionally apply a modifier to a View.
-    /// This function applies a given transformation to the view only if the condition is met.
+    
+    /// Applies accessibility information such as label, hint, and traits to a given view.
+    ///
+    /// This method adds the basic accessibility elements to a view, including its descriptive label,
+    /// hint for VoiceOver users, and accessibility traits that describe the behavior of the element.
     ///
     /// - Parameters:
-    ///   - condition: A `Bool` determining whether the transformation should be applied.
-    ///   - transform: A closure that applies the transformation to the view.
+    ///   - view:    The `AnyView` to which the accessibility properties should be applied.
+    ///   - label:   A `String` describing the purpose of the view for VoiceOver users.
+    ///   - hint:    A `String` providing additional information or guidance for the view.
+    ///   - traits: `AccessibilityTraits` that describe the element’s behavior,
+    ///              such as `.button` or `.adjustable`.
     ///
-    /// - Returns: The transformed view if the condition is `true`, or the original view if `false`.
-    @ViewBuilder
-    func applyIf<T: View>(_ condition: Bool, transform: (Self) -> T) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
+    /// - Returns: A modified `AnyView` with the specified accessibility properties.
+    ///
+    /// ```swift
+    /// let buttonView = Button("Tap Me") {}
+    /// let accessibleButton = AccessibilityHelper.setAccessibility(
+    ///     view: AnyView(buttonView),
+    ///     label: "Tap Me Button",
+    ///     hint: "Taps the button",
+    ///     traits: .isButton
+    /// )
+    /// ```
+    static func setAccessibility(
+        view: AnyView,
+        label: String,
+        hint: String,
+        traits: AccessibilityTraits
+    ) -> AnyView {
+        return AnyView(
+            view
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(label))
+                .accessibilityHint(Text(hint))
+                .accessibilityAddTraits(traits)
+        )
+    }
+    
+    /// Adds custom accessibility actions to a view for VoiceOver users.
+    ///
+    /// This method enables the addition of custom VoiceOver actions, which can be triggered via
+    /// specific VoiceOver gestures. Each action consists of a name and an associated closure that
+    /// is executed when the action is selected.
+    ///
+    /// - Parameters:
+    ///   - view:    The `AnyView` to which the custom actions should be applied.
+    ///   - actions: An array of tuples where each tuple contains a `String` for the action
+    ///              name and a closure (`() -> Void`) that executes the corresponding action.
+    ///
+    /// - Returns: A modified `AnyView` with the specified accessibility actions.
+    ///
+    /// ```swift
+    /// let buttonView = Button("Tap Me") {}
+    /// let accessibleButton = AccessibilityHelper.addAccessibilityActions(
+    ///     view: AnyView(buttonView),
+    ///     actions: [
+    ///         ("Action 1", { print("Action 1 performed") }),
+    ///         ("Action 2", { print("Action 2 performed") })
+    ///     ]
+    /// )
+    /// ```
+//    static func addAccessibilityActions(
+//        view: AnyView,
+//        actions: [(String, () -> Void)]
+//    ) -> AnyView {
+//        return AnyView(
+//            view.accessibilityActions {
+//                ForEach(actions, id: \.0) { actionName, action in
+//                    accessibilityAction(named: Text(actionName), action)
+//                }
+//            }
+//        )
+//    }
+    
+    /// Sets the dynamic accessibility value for a view.
+    ///
+    /// This method allows the specification of a dynamic value (e.g., a percentage or a numeric value)
+    /// for accessibility purposes. VoiceOver will announce this value when interacting with the view.
+    ///
+    /// - Parameters:
+    ///   - view:  The `AnyView` to which the dynamic value should be applied.
+    ///   - value: A `String` representing the dynamic value (e.g., "50%").
+    ///
+    /// - Returns: A modified `AnyView` with the specified accessibility value.
+    ///
+    /// ```swift
+    /// let sliderView = Slider(value: .constant(0.5), in: 0...1)
+    /// let accessibleSlider = AccessibilityHelper.setAccessibilityValue(
+    ///     view: AnyView(sliderView),
+    ///     value: "50%"
+    /// )
+    /// ```
+    static func setAccessibilityValue(
+        view: AnyView,
+        value: String? = nil
+    ) -> AnyView {
+        var modifiedView = view
+        
+        if let value = value {
+            modifiedView = AnyView(
+                modifiedView.accessibilityValue(Text(value))
+            )
         }
+        
+        return modifiedView
+    }
+    
+    /// Manages the focus state of a view for accessibility purposes.
+    ///
+    /// This method allows the view to be focused using accessibility technologies such as
+    /// VoiceOver, enabling dynamic focus management for complex view hierarchies.
+    ///
+    /// - Parameters:
+    ///   - view:      The `AnyView` to apply the focus state to.
+    ///   - isFocused: An optional `AccessibilityFocusState<Bool>.Binding` that
+    ///                manages the focus state of the view.
+    ///
+    /// - Returns: A modified `AnyView` that incorporates the focus state.
+    ///
+    /// ```swift
+    /// @AccessibilityFocusState private var isFocused: Bool
+    /// let textView = Text("Hello, World!")
+    /// let accessibleTextView = AccessibilityHelper.setAccessibilityFocus(
+    ///     view: AnyView(textView),
+    ///     isFocused: $isFocused
+    /// )
+    /// ```
+    static func setAccessibilityFocus(
+        view: AnyView,
+        isFocused: AccessibilityFocusState<Bool>.Binding? = nil
+    ) -> AnyView {
+        var modifiedView = view
+        
+        if let isFocused = isFocused {
+            modifiedView = AnyView(
+                modifiedView.accessibilityFocused(isFocused)
+            )
+        }
+        
+        return modifiedView
     }
 }
