@@ -48,8 +48,45 @@ public enum SAError: Error {
     case dynamicTextSizeUnsupported
     case gestureRecognitionFailed
     case systemVersionIncompatible(String)
-    case insufficientPermissions
+    case insufficientPermissions(UInt16)
     case unknown(UInt16)
+    
+    var errorCodes: CustomStringConvertible {
+        switch self {
+        case .failedConfig(let uInt16):
+            return -300
+        case .unsupportedFeature(let string):
+            return string
+        case .accessibilityNotEnabled(let uInt16):
+            return -301
+        case .invalidAccessibilityElement(let uInt16):
+            return -302
+        case .focusFailure:
+            return -303
+        case .missingLabel:
+            return -304
+        case .actionNotAvailable(let uInt16):
+            return -305
+        case .hapticError(let string):
+            return string
+        case .invalidTraits(let uInt16):
+            return -306
+        case .viewNotFound(let uInt16):
+            return -307
+        case .missingHint:
+            return -308
+        case .dynamicTextSizeUnsupported:
+            return -309
+        case .gestureRecognitionFailed:
+            return -310
+        case .systemVersionIncompatible(let string):
+            return string
+        case .insufficientPermissions(let uInt16):
+            return -311
+        case .unknown(let uInt16):
+            return -399
+        }
+    }
 }
 
 /// A class to handle custom exceptions for accessibility-related errors in the application.
@@ -77,7 +114,11 @@ public final class SAException: Error, @preconcurrency CustomStringConvertible {
     ///   - error: The underlying `SAError` that triggered this exception.
     ///   - message: A custom message providing more information about the exception.
     ///   - context: Optional additional context or metadata about the exception.
-    public init(error: SAError, message: String, context: [String: Any]? = nil) {
+    public init(
+        error: SAError,
+        message: String,
+        context: [String: Any]? = nil
+    ) {
         self.error = error
         self.message = message
         self.context = context
@@ -97,7 +138,10 @@ public final class SAException: Error, @preconcurrency CustomStringConvertible {
     ///
     /// This method provides a way to record the exception details for future debugging
     /// or analysis. It integrates with `SCRLog` for logging accessibility-specific issues.
-    public func logException(signal: UInt16, message: String) {
+    public func logException(
+        signal: UInt16,
+        message: String
+    ) {
         a11yLogger.log(
             "AccessibilityKit has raised an exception with signal (\(signal)) and message '\(message)'",
             with: .info
@@ -107,7 +151,10 @@ public final class SAException: Error, @preconcurrency CustomStringConvertible {
     /// Raises the exception in a controlled manner, capturing the error and logging it.
     ///
     /// - Throws: The captured `SAException`.
-    public func raiseException(signal: UInt16, message: String) throws {
+    public func raiseException(
+        signal: UInt16,
+        message: String
+    ) throws {
         logException(signal: signal, message: message)
         throw self
     }
@@ -139,6 +186,7 @@ public final class SAException: Error, @preconcurrency CustomStringConvertible {
              .actionNotAvailable(let code),
              .invalidTraits(let code),
              .viewNotFound(let code),
+             .insufficientPermissions(let code),
              .unknown(let code):
             return code
         default:

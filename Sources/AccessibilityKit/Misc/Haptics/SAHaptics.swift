@@ -38,7 +38,10 @@ public final class SAHaptics {
     
     public init() {
         if let error = startHapticEngine() {
-            a11yLogger.log("Haptic Engine Initialization Error: \(error.localizedDescription)", with: .info)
+            a11yLogger.log(
+                "Haptic Engine Initialization Error: \(error.localizedDescription)",
+                with: .info
+            )
         }
     }
     
@@ -65,7 +68,10 @@ public final class SAHaptics {
     ///   - sharpness: A `Float` value representing the sharpness of the haptic feedback (0.0 to 1.0).
     ///
     /// - Returns: An optional `SAError` if there was an issue creating or playing the haptic pattern.
-    public func playHaptic(intensity: Float, sharpness: Float) -> SAError? {
+    public func playHaptic(
+        intensity: Float,
+        sharpness: Float
+    ) -> SAError? {
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else {
             return .systemVersionIncompatible("Haptic feedback is not supported on this device.")
         }
@@ -82,20 +88,15 @@ public final class SAHaptics {
             return .hapticError("Failed to create haptic pattern: \(error.localizedDescription)")
         }
         
-        let player: CHHapticPatternPlayer
         do {
-            player = try hapticEngine?.makePlayer(with: hapticPattern) ?? CHHapticPatternPlayer()
-        } catch {
-            return .hapticError("Failed to create haptic player: \(error.localizedDescription)")
-        }
-        
-        do {
-            try player.start(atTime: CHHapticTimeImmediate)
+            let player = try hapticEngine?.makePlayer(with: hapticPattern)
+            try player?.start(atTime: CHHapticTimeImmediate)
             return nil
         } catch {
             return .hapticError("Failed to start haptic player: \(error.localizedDescription)")
         }
     }
+    
     
     public func stopHapticEngine() {
         hapticEngine?.stop()
