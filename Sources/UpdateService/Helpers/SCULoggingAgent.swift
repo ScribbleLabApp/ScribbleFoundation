@@ -32,6 +32,7 @@
 import Foundation
 import ScribbleFoundation
 
+@available(iOS 18.0, macOS 15.0, *)
 nonisolated(unsafe) internal let suLogger = SCRLog(
     subsystem: "com.scribblelabapp.UpdateService",
     category: .log

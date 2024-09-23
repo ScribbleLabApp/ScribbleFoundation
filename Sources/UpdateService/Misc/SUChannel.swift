@@ -31,23 +31,48 @@
 
 import Foundation
 
+/// An enumeration representing the different update channels for the app.
+///
+/// - `stable`: Represents the stable channel, where users receive stable production releases.
+/// - `pre_release`: Represents the pre-release channel, where users receive alpha/beta releases.
+@available(iOS 18.0, macOS 15.0, *)
 public enum SUChannel: String {
+    
+    /// The stable update channel.
     case stable
+    
+    /// The pre-release update channel.
     case pre_release
     
+    /// The currently subscribed update channel, if any.
+    ///
+    /// This property retrieves the value from `UserDefaults` where the subscribed channel is saved.
+    /// If no channel has been saved, this property returns `nil`.
+    ///
+    /// - Returns: The `SUChannel` if a channel is subscribed, otherwise `.stable`.
     public static var subscribed: SUChannel? {
-        guard let channelString = UserDefaults.standard.string(forKey: "SubscribedChannel") else {
-            return nil
+        guard let channelString = UserDefaults.standard.string(forKey: "kSubscribedChannel") else {
+            return .stable
         }
         
         return SUChannel(rawValue: channelString)
     }
     
-    /// Writes the subscribed channel to UserDefaults.
+    /// Sets the current channel as the subscribed channel and stores it in `UserDefaults`.
+    ///
+    /// This method writes the string representation of the `SUChannel` to `UserDefaults`
+    /// under the key `"kSubscribedChannel"`, allowing it to persist across app sessions.
+    ///
+    /// - Note: This method does not check if a channel is already subscribed.
     public func setAsSubscribed() {
-        UserDefaults.standard.set(rawValue, forKey: "SubscribedChannel")
+        UserDefaults.standard.set(rawValue, forKey: "kSubscribedChannel")
     }
     
+    /// A user-friendly display name for the update channel.
+    ///
+    /// - Returns: A `String` representing the name of the update channel.
+    ///   - For `.stable`: Returns "Stable".
+    ///   - For `.pre_release`: Returns "Alpha/Beta".
     var displayName: String {
         switch self {
         case .stable:

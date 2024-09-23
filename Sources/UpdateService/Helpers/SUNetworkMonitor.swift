@@ -34,6 +34,7 @@ import Network
 import Foundation
 import ScribbleFoundation
 
+@available(iOS 18.0, macOS 15.0, *)
 internal final class SUNetworkMonitor: Sendable {
     
     /// A thread-safe boolean that indicates if the device is connected to the internet.
