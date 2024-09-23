@@ -11,11 +11,14 @@ let package = Package(
             name: "ScribbleFoundation",
             targets: ["ScribbleFoundation"]),
         .library(
+            name: "AccessibilityKit",
+            targets: ["ScribbleFoundation"]),
+        .library(
             name: "ScribbleFoundationUI",
             targets: ["ScribbleFoundationUI"]),
         .library(
-            name: "AccessibilityKit",
-            targets: ["ScribbleFoundationUI", "ScribbleFoundation"])
+            name: "UpdateService",
+            targets: ["UpdateService"]),
     ],
     dependencies: [
         .package(
@@ -39,6 +42,11 @@ let package = Package(
             name: "ScribbleFoundationUI",
             dependencies: ["ScribbleFoundation"],
             path: "Sources/ScribbleFoundationUI"
+        ),
+        .target(
+            name: "UpdateService",
+            dependencies: ["ScribbleFoundation"],
+            path: "Sources/UpdateService"
         ),
         .testTarget(
             name: "ScribbleFoundationTests",

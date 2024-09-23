@@ -33,7 +33,11 @@
 import Foundation
 import ScribbleFoundation
 
-nonisolated(unsafe) public let a11yLogger = SCRLog(
+/// SCR-Logger instance for internal debug/fault logging
+///
+/// > Warning:
+/// > The non internal use of this instance can lead into undefined behaviour. To use ``ScribbleFoundation/SCRLog`` create a new instance with subsystem and category.
+nonisolated(unsafe) internal let a11yLogger = SCRLog(
     subsystem: "com.scribblelabapp.accessibilityLogger",
     category: .a11y
 )

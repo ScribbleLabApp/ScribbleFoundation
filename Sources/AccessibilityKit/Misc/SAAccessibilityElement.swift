@@ -32,8 +32,6 @@
 import SwiftUI
 import Foundation
 
-import ScribbleFoundationUI
-
 /// A SwiftUI View extension to enhance accessibility by adding custom labels, hints, traits, values,
 /// focus handling, and actions.
 ///
@@ -135,13 +133,13 @@ public extension View {
             .accessibilityLabel(Text(label))
             .accessibilityHint(Text(hint))
             .accessibilityAddTraits(traits)
-            .applyIf(value != nil) { view in
+            ._applyIf(value != nil) { view in
                 view.accessibilityValue(Text(value!))
             }
-            .applyIf(isFocused != nil) { view in
+            ._applyIf(isFocused != nil) { view in
                 view.accessibilityFocused(isFocused!)
             }
-            .applyIf(!accessibilityActions.isEmpty) { view in
+            ._applyIf(!accessibilityActions.isEmpty) { view in
                 view.accessibilityActions {
                     ForEach(accessibilityActions, id: \.0) { actionName, action in
                         accessibilityAction(named: Text(actionName), action)

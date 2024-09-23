@@ -37,7 +37,7 @@ For many, accessibility is a necessity. For others, it’s a practicality. For e
 
 ### Explore assistive technologies
 
-People can personalize their devices by choosing the accessibility features and assistive technologies that give them the best user experience. Make sure your app provides a great experience for people who use assistive technologies by testing your app with them.
+People can personalize ScribbleLab by choosing the accessibility features and assistive technologies that give them the best user experience. Make sure your app provides a great experience for people who use assistive technologies by testing your app with them.
 
 @Links(visualStyle: detailedGrid) {
     - <doc:VoiceCommands>
@@ -48,6 +48,9 @@ People can personalize their devices by choosing the accessibility features and 
 ## Topics
 
 ### Essentials
+
+- <doc:AccessibleDesign>
+- <doc:Changelog>
 
 ### Domains
 
