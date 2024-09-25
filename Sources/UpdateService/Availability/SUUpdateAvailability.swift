@@ -65,6 +65,6 @@ public protocol SUUpdateAvailability: AnyObject {
     ///           invalid responses.
     func checkUserUpdateAvailability(
         user: User,
-        completion: @Sendable @escaping (Result<Bool, Error>) -> Void
+        completion: @Sendable @escaping (Result<Bool, SUError>) -> Void
     ) async throws
 }
