@@ -41,6 +41,11 @@ import Foundation
 public protocol SUUpdateAvailability: AnyObject {
     
     /// The type representing a user.
+    ///
+    /// `User` represents the current user who has a valid app session,
+    /// and for whom the update check will be performed. This type typically
+    /// includes information such as the user's account ID, authentication token,
+    /// or any other relevant data required to identify the session.
     associatedtype User
     
     /// A Boolean value indicating whether an update is available.
@@ -56,6 +61,7 @@ public protocol SUUpdateAvailability: AnyObject {
     ///
     /// - Parameters:
     ///   - user: The `User` object for which the update availability should be checked.
+    ///           This represents the current user with an active session in the app.
     ///   - completion: A completion handler that returns a `Result<Bool, Error>`.
     ///                 The result contains `true` if an update is available,
     ///                 and `false` otherwise. If an error occurs during the
