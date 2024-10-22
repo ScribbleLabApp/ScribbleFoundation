@@ -40,8 +40,7 @@ jobs:
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/ScribbleFoundation.doccarchive \
             --hosting-base-path ScribbleFoundation \
-            --output-path docs \
-            --experimental-enable-custom-templates;
+            --output-path docs;
           echo "<script>window.location.href += \"/documentation/scribblefoundation\"</script>" > docs/index.html;
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

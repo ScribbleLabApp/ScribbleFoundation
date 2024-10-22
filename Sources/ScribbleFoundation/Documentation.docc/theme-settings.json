@@ -1,6 +1,6 @@
 {
     "footer": {
-      "htmlPath": "footer.html"
+        "htmlPath": "assets/footer.html"
     }
   }
   
