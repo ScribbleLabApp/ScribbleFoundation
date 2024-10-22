@@ -1,0 +1,51 @@
+name: Documentation 🚀
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: macos-15
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Get swift version
+        run: swift --version
+      - name: Select Xcode Version ✨
+        run: |
+          sudo xcode-select -switch /Applications/Xcode_16.app
+      - name: Delete DerivedData directory 🗑️
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+      - name: Build DocC
+        run: |
+          xcodebuild docbuild -scheme ScribbleFoundation \
+            -derivedDataPath /tmp/docbuild \
+            -destination 'generic/platform=iOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO;
+          $(xcrun --find docc) process-archive \
+            transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/ScribbleFoundation.doccarchive \
+            --hosting-base-path ScribbleFoundation \
+            --output-path docs;
+          echo "<script>window.location.href += \"/documentation/scribblefoundation\"</script>" > docs/index.html;
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
