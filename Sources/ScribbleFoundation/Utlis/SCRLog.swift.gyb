@@ -67,14 +67,18 @@ import Foundation
 /// - Logging methods for different categories: `error(_:)`, `debug(_:)`, `warning(_:)`, `memoryWarning(_:)`, `log(_:)`.
 ///
 /// - Note: To add new log categories, modify the `logLevels` list and the corresponding methods will be generated.
+@MainActor
 @available(iOS 18.0, macOS 15.0, *)
 public struct SCRLog {
+
+    /// Shared-instance of SCRLog
+    public static var shared = SCRLog(subsystem: "com.example.default", category: .log)
 
     /// The subsystem to categorize log messages.
     ///
     /// This is typically used to represent the application or module generating the log messages.
     /// Example: use the bundle identifier of your app to provide a unique subsystem.
-    public let subsystem: String
+    public var subsystem: String
     
     /// The category within the subsystem to further categorize log messages.
     ///
@@ -89,6 +93,23 @@ public struct SCRLog {
     public init(subsystem: String, category: Category) {
         self.subsystem = subsystem
         self.category = category
+    }
+    
+    /// Reconfigures the shared `SCRLog` instance with a new subsystem and category.
+    ///
+    /// This function allows you to update the global `SCRLog.shared` instance with custom values,
+    /// setting a new `subsystem` and `caregory` for logging. Calling `configureShared(subsystem:category:)`
+    /// effectively overrides the initial configuration of the shared instance.
+    ///
+    /// - Parameters:
+    ///   - subsystem: The new subsystem to categorize log messages, typically representing the applications
+    ///     or module generating the log messages. Use the bundle identifier of your app to provide a unique subsystem.
+    ///   - category: The new category within the subsystem to further categorize log messages, providing a finer level
+    ///     of granularity for log organization.
+    ///
+    /// - Note: Subsequent log messages sent via `SCR.shared` will use the updated subsystem and category.
+    public static func configureShared(subsystem: String, category: Category) {
+        shared = SCRLog(subsystem: subsystem, category: category)
     }
     
     /// Creates a `Logger` instance configured with the specified subsystem and category.
