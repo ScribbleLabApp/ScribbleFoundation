@@ -37,6 +37,9 @@ import Foundation
 /// It is intended to be used in environments that support asynchronous tasks and main actor operations.
 @available(iOS 18.0, macOS 15.0, *)
 public protocol Authenticatable {
+
+    /// The associated type for user roles.
+    associatedtype UserRole
     
     /// Logs in a user with the specified email and password.
     ///
@@ -80,13 +83,29 @@ public protocol Authenticatable {
     /// - Main Actor: This method should be called on the main thread.
     @MainActor
     static func resetPassword(email: String, resetCompletion:@escaping (Result<Bool, Error>) -> Void)
-    
-    /// Uploads user data to the server.
+
+    /// Uploads user data to Firestore.
+    ///
+    /// This private function creates a user object using the provided details, sets it as the current user,
+    /// encodes it, and then uploads it to Firestore.
     ///
     /// - Parameters:
     ///   - uid: The unique identifier for the user.
-    ///   - username: The username of the user.
-    ///   - email: The email address of the user.
-    /// - Note: This method is private and should be used internally within conforming types to handle user data upload.
-    func uploadUserData(uid: String, username: String, email: String) async
+    ///   - username: The username associated with the user.
+    ///   - email: The email address associated with the user.
+    ///   - usrRole: The role of the user (intern, developer, etc.).
+    ///   - hasPremium: A Boolean indicating whether the user has a premium account.
+    ///
+    /// - Note: This function sets the current user with the provided details and uploads it to Firestore.
+    ///         It is a private function and should be called from within the `SLAuthService`.
+    ///
+    /// > WARNING
+    /// > This function is called internally by the `SLAuthService` and should not typically be accessed directly.
+    func uploadUserData(
+        uid: String,
+        username: String,
+        email: String,
+        usrRole: UserRole,
+        hasPremium: Bool
+    ) async
 }
