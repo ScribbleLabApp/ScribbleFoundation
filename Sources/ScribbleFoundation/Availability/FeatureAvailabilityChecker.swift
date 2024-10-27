@@ -32,6 +32,11 @@
 #if canImport(UIKit)
 import UIKit
 #endif
+
+#if canImport(AppKit)
+import AppKit
+#endif
+
 import SwiftUI
 import Foundation
 
@@ -117,6 +122,26 @@ public struct FeatureAvailabilityChecker: Availability {
         #endif
         
         return "Feature is not available due to custom conditions."
+    }
+    #elseif canImport(AppKit)
+    public func availabilityReason() -> String {
+        let currentVersion = ProcessInfo.processInfo.operatingSystemVersion
+
+        if !isAvailable(
+            forOS: OperatingSystemVersion(
+                majorVersion: 15,
+                minorVersion: 0,
+                patchVersion: 0),
+            currentVersion: currentVersion
+        ) {
+            return "Feature requires macOS 15.0 or later."
+        }
+        
+        return "Feature is not available due to custom conditions."
+    }
+    #else
+    public func availabilityReason() -> String {
+        return "Feature availability cannot be determined without UIKit or AppKit."
     }
     #endif
 }
