@@ -123,5 +123,14 @@ public protocol Availability {
     /// - Returns: A string detailing why the feature is not available based on the current system and device conditions.
     /// - Note: Implementations of this method should provide clear and informative reasons for feature unavailability.
     @MainActor func availabilityReason() -> String
+    #else
+    /// Provides a detailed reason why the feature is not available based on the provided conditions.
+    ///
+    /// This method returns a string that explains why the feature is not available, helping to provide context or
+    /// debugging information. It can be useful for displaying error messages or troubleshooting issues.
+    ///
+    /// - Returns: A string detailing why the feature is not available based on the current system and device conditions.
+    /// - Note: Implementations of this method should provide clear and informative reasons for feature unavailability.
+    @MainActor func availabilityReason() -> String
     #endif
 }
